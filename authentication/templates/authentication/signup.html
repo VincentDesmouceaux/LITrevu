@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block content %}
+<div class="signup-container">
+    <h1>Inscription à LITRevu</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Génère automatiquement tous les champs du formulaire avec des balises <p> -->
+        <button type="submit" class="btn btn-primary">S'inscrire</button>
+    </form>
+
+    <a href="{% url 'homepage' %}" class="btn btn-secondary">Retourner à la page d'accueil</a>
+</div>
+{% endblock %}

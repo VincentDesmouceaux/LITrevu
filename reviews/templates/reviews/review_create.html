@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Créer une critique</h2>
+    <p>Vous êtes en train de poster en réponse à : </p>
+    
+    <!-- Affichage du ticket lié -->
+    <div class="ticket">
+        <h4>{{ ticket.title }}</h4>
+        <p><strong>Demandé par :</strong> {{ ticket.user.username }}</p>
+        <p>{{ ticket.description }}</p>
+        {% if ticket.image %}
+            <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" width="150">
+        {% endif %}
+        <p><small>{{ ticket.created_at }}</small></p>
+    </div>
+
+    <!-- Formulaire pour poster une critique en réponse -->
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Génère automatiquement tous les champs du formulaire avec des balises <p> -->
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    </form>
+</div>
+{% endblock %}

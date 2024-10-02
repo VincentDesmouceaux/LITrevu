@@ -1,9 +1,28 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from users.models import CustomUser  # Correct
+from .models import Ticket, Review
+
+# Formulaire pour la création et la modification des billets (Tickets)
 
 
-class CustomUserCreationForm(UserCreationForm):
+class TicketForm(forms.ModelForm):
     class Meta:
-        model = CustomUser
-        fields = ('username', 'email', 'password1', 'password2')
+        model = Ticket
+        fields = ['title', 'description', 'image']  # Les champs que tu veux exposer dans le formulaire
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Titre'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Description'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+        }
+
+# Formulaire pour la création et la modification des critiques (Reviews)
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['headline', 'rating', 'body']  # Les champs que tu veux exposer dans le formulaire
+        widgets = {
+            'headline': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Titre de la critique'}),
+            'rating': forms.RadioSelect(),
+            'body': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Commentaire'}),
+        }
