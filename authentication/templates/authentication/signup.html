@@ -8,7 +8,37 @@
 
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}  <!-- Génère automatiquement tous les champs du formulaire avec des balises <p> -->
+        
+        <div class="form-group">
+            <label for="id_username">Nom d'utilisateur</label>
+            <input type="text" name="username" maxlength="150" required id="id_username">
+            <small>Requis. 150 caractères ou moins. Lettres, chiffres et @/./+/-/_ uniquement.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="id_email">Adresse e-mail</label>
+            <input type="email" name="email" required id="id_email">
+        </div>
+
+        <div class="form-group">
+            <label for="id_password1">Mot de passe</label>
+            <input type="password" name="password1" required id="id_password1">
+            <small>
+                <ul>
+                    <li>Votre mot de passe ne doit pas être trop similaire à vos autres informations personnelles.</li>
+                    <li>Votre mot de passe doit contenir au moins 8 caractères.</li>
+                    <li>Votre mot de passe ne doit pas être un mot de passe couramment utilisé.</li>
+                    <li>Votre mot de passe ne doit pas être entièrement numérique.</li>
+                </ul>
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="id_password2">Confirmation du mot de passe</label>
+            <input type="password" name="password2" required id="id_password2">
+            <small>Entrez le même mot de passe que précédemment, pour vérification.</small>
+        </div>
+
         <button type="submit" class="btn btn-primary">S'inscrire</button>
     </form>
 
