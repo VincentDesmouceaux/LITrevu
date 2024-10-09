@@ -50,14 +50,15 @@ class ReviewCreateWithoutTicketView(LoginRequiredMixin, CreateView):
 class ReviewUpdateView(LoginRequiredMixin, UpdateView):
     model = Review
     form_class = ReviewForm
-    template_name = 'reviews/review_form_response.html'
+    template_name = 'reviews/review_edit.html'  # Assurez-vous que c'est bien ce fichier
     success_url = reverse_lazy('homepage')
     login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['review'] = self.get_object()
-        context['ticket'] = self.get_object().ticket
+        context['ticket'] = self.get_object().ticket  # Récupère le ticket lié à la critique
+        context['rating_range'] = range(6)  # Pour afficher les notes de 0 à 5
         return context
 
     def get_queryset(self):

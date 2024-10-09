@@ -20,9 +20,18 @@
                 <ul class="nav-links">
                     <li><a href="{% url 'homepage' %}">Flux</a></li>
                     <li><a href="{% url 'ticket-add' %}">Créer un ticket</a></li>
-                    <li><a href="{% url 'review-create' %}">Créer une critique</a></li> <!-- Nouveau lien pour la création d'une critique indépendante -->
-                    <li><a href="{% url 'review-add' ticket_id=1 %}">Créer une critique (en réponse à un ticket)</a></li> <!-- Ajuste le ticket_id si nécessaire -->
-             
+                    <li><a href="{% url 'review-create' %}">Créer une critique</a></li>
+                    
+                    <!-- Lister les tickets de l'utilisateur pour créer une critique en réponse -->
+                    {% for ticket in user.tickets.all %}
+                        <li><a href="{% url 'review-add' ticket_id=ticket.pk %}">Créer une critique (en réponse à "{{ ticket.title }}")</a></li>
+                    {% endfor %}
+                    
+                    <!-- Liste des critiques de l'utilisateur avec lien pour les modifier -->
+                    {% for review in user.reviews.all %}
+                        <li><a href="{% url 'review-edit' pk=review.pk %}">Modifier la critique "{{ review.headline }}"</a></li>
+                    {% endfor %}
+                    
                     <li><a href="#">Abonnements</a></li>
                     <li>
                         <form method="post" action="{% url 'logout' %}">
