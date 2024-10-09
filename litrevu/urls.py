@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from authentication.views import HomePageView
@@ -21,3 +23,6 @@ urlpatterns = [
     path('review/<int:pk>/edit/', ReviewUpdateView.as_view(), name='review-edit'),
     path('review/<int:pk>/delete/', ReviewDeleteView.as_view(), name='review-delete'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

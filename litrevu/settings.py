@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -89,3 +90,5 @@ AUTH_USER_MODEL = 'authentication.CustomUser'
 LOGIN_REDIRECT_URL = 'homepage'  # Redirection après connexion
 LOGIN_URL = 'login'  # URL de connexion pour les utilisateurs non connectés
 LOGOUT_REDIRECT_URL = 'homepage'  # Redirection après déconnexion
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

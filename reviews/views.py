@@ -33,13 +33,13 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
 class ReviewCreateWithoutTicketView(LoginRequiredMixin, CreateView):
     model = Review
     form_class = ReviewForm
-    template_name = 'reviews/review_create.html'  # Template pour les critiques indépendantes
+    template_name = 'reviews/review_create.html'  # Assure-toi que c'est bien le nom de ton template
     success_url = reverse_lazy('homepage')
     login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['rating_range'] = range(6)
+        context['rating_range'] = range(6)  # Définit la plage de 0 à 5 pour les notes
         return context
 
     def form_valid(self, form):

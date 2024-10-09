@@ -14,8 +14,9 @@
         <p><strong>Demandé par :</strong> {{ ticket.user.username }}</p>
         <p>{{ ticket.description }}</p>
         {% if ticket.image %}
-            <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" width="150">
-        {% endif %}
+        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" width="150">
+    {% endif %}
+    
         <p><small>Créé le : {{ ticket.time_created|date:"d F Y H:i" }}</small></p>
     </div>
 
