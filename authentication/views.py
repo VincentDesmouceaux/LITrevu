@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 from .models import CustomUser
 from .forms import CustomUserCreationForm
 
@@ -31,3 +31,12 @@ class UserSignUpView(CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         return response
+
+
+class HomePageView(TemplateView):
+    template_name = 'authentication/homepage.html'  # Chemin correct pour le template de la page d'accueil
+
+    def get(self, request, *args, **kwargs):
+        print(f"Utilisateur sur la page d'accueil : {request.user}")
+        print(f"Authentifié ? {request.user.is_authenticated}")
+        return super().get(request, *args, **kwargs)

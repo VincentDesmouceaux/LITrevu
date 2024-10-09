@@ -8,10 +8,9 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <!-- Si l'utilisateur est connecté, afficher la barre de navigation -->
     <h2>Test de debug :</h2>
-    <p>Utilisateur connecté : {{ user.is_authenticated }}</p> <!-- Ajout d'un test d'authentification -->
-    <p>Nom d'utilisateur : {{ user.username }}</p> <!-- Pour voir le nom de l'utilisateur connecté -->
+    <p>Utilisateur connecté : {{ user.is_authenticated }}</p>
+    <p>Nom d'utilisateur : {{ user.username }}</p>
 
     {% if user.is_authenticated %}
     <header>
@@ -20,7 +19,9 @@
                 <h1><a href="{% url 'homepage' %}">LITRevu</a></h1>
                 <ul class="nav-links">
                     <li><a href="{% url 'homepage' %}">Flux</a></li>
-                    <li><a href="{% url 'ticket-add' %}">Posts</a></li>
+                    <li><a href="{% url 'ticket-add' %}">Créer un billet</a></li>
+                    <li><a href="{% url 'review-add' ticket_id=1 %}">Créer une critique (en réponse à un ticket)</a></li> <!-- Ajuste le ticket_id si nécessaire -->
+                    <li><a href="{% url 'review-create' %}">Créer une critique</a></li> <!-- Nouveau lien pour la création d'une critique indépendante -->
                     <li><a href="#">Abonnements</a></li>
                     <li>
                         <form method="post" action="{% url 'logout' %}">

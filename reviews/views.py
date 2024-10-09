@@ -1,18 +1,67 @@
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from .models import Ticket, Review
 from .forms import TicketForm, ReviewForm
 
+# Critique en réponse à un ticket existant
 
-class HomePageView(TemplateView):
-    template_name = 'reviews/homepage.html'  # Chemin correct pour le template de la page d'accueil
 
-    def get(self, request, *args, **kwargs):
-        print(f"Utilisateur sur la page d'accueil : {request.user}")
-        print(f"Authentifié ? {request.user.is_authenticated}")
-        return super().get(request, *args, **kwargs)
+class ReviewCreateView(LoginRequiredMixin, CreateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = 'reviews/review_form_response.html'  # Template pour les critiques liées à un ticket
+    success_url = reverse_lazy('homepage')
+    login_url = reverse_lazy('login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rating_range'] = range(6)
+        context['ticket'] = get_object_or_404(Ticket, id=self.kwargs['ticket_id'])
+        return context
+
+    def form_valid(self, form):
+        # Associer le ticket à la critique avant de la sauvegarder
+        ticket = get_object_or_404(Ticket, id=self.kwargs['ticket_id'])
+        form.instance.ticket = ticket
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+# Critique indépendante (sans ticket)
+class ReviewCreateWithoutTicketView(LoginRequiredMixin, CreateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = 'reviews/review_create.html'  # Template pour les critiques indépendantes
+    success_url = reverse_lazy('homepage')
+    login_url = reverse_lazy('login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rating_range'] = range(6)
+        return context
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+class ReviewUpdateView(LoginRequiredMixin, UpdateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = 'reviews/review_form_response.html'
+    success_url = reverse_lazy('homepage')
+    login_url = reverse_lazy('login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['review'] = self.get_object()
+        context['ticket'] = self.get_object().ticket
+        return context
+
+    def get_queryset(self):
+        return Review.objects.filter(user=self.request.user)
 
 
 class TicketCreateView(LoginRequiredMixin, CreateView):
@@ -46,30 +95,6 @@ class TicketDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return Ticket.objects.filter(user=self.request.user)
-
-
-class ReviewCreateView(LoginRequiredMixin, CreateView):
-    model = Review
-    form_class = ReviewForm
-    template_name = 'reviews/review_create.html'
-    success_url = reverse_lazy('homepage')
-    login_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        form.instance.ticket = get_object_or_404(Ticket, id=self.kwargs['ticket_id'])
-        return super().form_valid(form)
-
-
-class ReviewUpdateView(LoginRequiredMixin, UpdateView):
-    model = Review
-    form_class = ReviewForm
-    template_name = 'reviews/review_edit.html'
-    success_url = reverse_lazy('homepage')
-    login_url = reverse_lazy('login')
-
-    def get_queryset(self):
-        return Review.objects.filter(user=self.request.user)
 
 
 class ReviewDeleteView(LoginRequiredMixin, DeleteView):
