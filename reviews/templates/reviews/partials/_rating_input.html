@@ -1,0 +1,8 @@
+<div class="d-flex justify-content-between rating-group">
+    {% for i in rating_range %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" {% if form.rating.value == i %}checked{% endif %} required>
+            <label class="form-check-label" for="rating-{{ i }}">{{ i }}</label>
+        </div>
+    {% endfor %}
+</div>

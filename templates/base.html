@@ -27,9 +27,16 @@
                         <li><a href="{% url 'review-add' ticket_id=ticket.pk %}">Créer une critique (en réponse à "{{ ticket.title }}")</a></li>
                     {% endfor %}
                     
-                    <!-- Liste des critiques de l'utilisateur avec lien pour les modifier -->
+                    <!-- Liste des critiques de l'utilisateur avec liens pour modifier et supprimer -->
                     {% for review in user.reviews.all %}
                         <li><a href="{% url 'review-edit' pk=review.pk %}">Modifier la critique "{{ review.headline }}"</a></li>
+                        <li><a href="{% url 'review-delete' pk=review.pk %}" class="text-danger">Supprimer la critique "{{ review.headline }}"</a></li>
+                    {% endfor %}
+                    
+                    <!-- Liste des tickets de l'utilisateur avec liens pour modifier et supprimer -->
+                    {% for ticket in user.tickets.all %}
+                        <li><a href="{% url 'ticket-edit' pk=ticket.pk %}">Modifier le ticket "{{ ticket.title }}"</a></li>
+                        <li><a href="{% url 'ticket-delete' pk=ticket.pk %}" class="text-danger">Supprimer le ticket "{{ ticket.title }}"</a></li>
                     {% endfor %}
                     
                     <li><a href="#">Abonnements</a></li>

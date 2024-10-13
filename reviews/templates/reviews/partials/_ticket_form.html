@@ -1,0 +1,28 @@
+{% load crispy_forms_tags %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <!-- Champ pour le titre -->
+    <div class="form-group">
+        {{ form.title|as_crispy_field }}
+    </div>
+    
+    <!-- Champ pour la description -->
+    <div class="form-group mt-4">
+        {{ form.description|as_crispy_field }}
+    </div>
+    
+    <!-- Champ pour l'image -->
+    <div class="form-group mt-4">
+        {{ form.image|as_crispy_field }}
+        {% if form.image.value %}
+            <p class="mt-2">Image actuelle :</p>
+            <img src="{{ form.image.value.url }}" alt="{{ form.title.value }}" width="150">
+        {% endif %}
+    </div>
+    
+    <!-- Bouton pour soumettre les modifications -->
+    <div class="form-group mt-4">
+        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+    </div>
+</form>

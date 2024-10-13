@@ -29,21 +29,46 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-# Critique indépendante (sans ticket)
 class ReviewCreateWithoutTicketView(LoginRequiredMixin, CreateView):
     model = Review
     form_class = ReviewForm
-    template_name = 'reviews/review_create.html'  # Assure-toi que c'est bien le nom de ton template
+    template_name = 'reviews/review_create.html'
     success_url = reverse_lazy('homepage')
     login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['rating_range'] = range(6)  # Définit la plage de 0 à 5 pour les notes
+        context['rating_range'] = range(6)
         return context
 
     def form_valid(self, form):
+        title = self.request.POST.get('title')
+        description = self.request.POST.get('description')
+        image = self.request.FILES.get('file')
+
+        # Log les données récupérées
+        print(f"Title: {title}, Description: {description}, Image: {image}")
+
+        # Assurez-vous que 'title' et 'description' sont bien présents
+        if not title or not description:
+            form.add_error(None, "Le titre et la description du billet sont requis.")
+            print("Erreur : Le titre ou la description est manquant.")
+            return self.form_invalid(form)
+
+        # Créez le billet associé à la critique
+        ticket = Ticket.objects.create(
+            title=title,
+            description=description,
+            user=self.request.user,
+            image=image
+        )
+        print(f"Ticket créé : {ticket}")
+
+        # Associez le ticket à la critique avant de la sauvegarder
+        form.instance.ticket = ticket
         form.instance.user = self.request.user
+
+        # Appel à la méthode super pour sauvegarder la critique
         return super().form_valid(form)
 
 

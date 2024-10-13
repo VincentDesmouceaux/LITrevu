@@ -1,17 +1,9 @@
 {% extends "base.html" %}
-
 {% block title %}Créer un ticket{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1 class="text-center">Créer un ticket</h1>
-
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}  <!-- Génère automatiquement tous les champs du formulaire avec des balises <p> -->
-        <div class="form-group mt-4 text-center">
-            <button type="submit" class="btn btn-primary">Envoyer</button>
-        </div>
-    </form>
+<div class="container mt-5">
+    <h2 class="text-center">Créer un ticket</h2>
+    {% include 'reviews/partials/_ticket_form.html' %}
 </div>
 {% endblock %}

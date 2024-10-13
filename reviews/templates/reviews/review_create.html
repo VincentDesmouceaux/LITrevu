@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block title %}
     Créer une critique - LITReview
@@ -10,17 +11,17 @@
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        
+
         <!-- Section Livre/Article -->
         <div class="form-group mt-4">
             <h2>Livre/Article</h2>
             <label for="title">Titre</label>
-            <input type="text" class="form-control" id="title" name="title" placeholder="Titre du livre ou de l'article" required>
+            <input type="text" class="form-control" id="title" name="title" value="{{ form.title.value|default_if_none:'' }}" placeholder="Titre du livre ou de l'article" required>
         </div>
 
         <div class="form-group mt-4">
             <label for="description">Description</label>
-            <textarea class="form-control" id="description" name="description" rows="5" placeholder="Description du livre ou de l'article" required></textarea>
+            <textarea class="form-control" id="description" name="description" rows="5" placeholder="Description du livre ou de l'article" required>{{ form.description.value|default_if_none:'' }}</textarea>
         </div>
 
         <div class="form-group mt-4">
@@ -32,20 +33,20 @@
         <div class="form-group mt-5">
             <h2>Critique</h2>
             <label for="headline">Titre de la critique</label>
-            <input type="text" class="form-control" id="headline" name="headline" placeholder="Titre de la critique" required>
+            <input type="text" class="form-control" id="headline" name="headline" value="{{ form.headline.value|default_if_none:'' }}" placeholder="Titre de la critique" required>
         </div>
 
         <div class="form-group mt-4">
             <label for="body">Commentaire</label>
-            <textarea class="form-control" id="body" name="body" rows="5" placeholder="Votre commentaire" required></textarea>
+            <textarea class="form-control" id="body" name="body" rows="5" placeholder="Votre commentaire" required>{{ form.body.value|default_if_none:'' }}</textarea>
         </div>
 
         <div class="form-group mt-4">
             <label>Note</label>
             <div class="d-flex justify-content-between rating-group">
-                {% for i in rating_range %}
+                {% for i in "012345" %}
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" required>
+                        <input class="form-check-input" type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" {% if form.rating.value == i|stringformat:"s" %}checked{% endif %} required>
                         <label class="form-check-label" for="rating-{{ i }}">{{ i }}</label>
                     </div>
                 {% endfor %}
@@ -54,5 +55,15 @@
 
         <button type="submit" class="btn btn-primary btn-block mt-4">Envoyer</button>
     </form>
+    <div class="form-errors">
+        {% if form.errors %}
+            <ul class="text-danger">
+                {% for field, errors in form.errors.items %}
+                    <li>{{ field }}: {{ errors|join:", " }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    
 </div>
 {% endblock %}

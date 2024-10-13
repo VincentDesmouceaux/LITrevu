@@ -18,6 +18,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'reviews',
     'authentication',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -92,3 +94,5 @@ LOGIN_URL = 'login'  # URL de connexion pour les utilisateurs non connectés
 LOGOUT_REDIRECT_URL = 'homepage'  # Redirection après déconnexion
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

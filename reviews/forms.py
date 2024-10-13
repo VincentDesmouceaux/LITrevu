@@ -20,7 +20,7 @@ class TicketForm(forms.ModelForm):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['headline', 'rating', 'body']
+        fields = ['headline', 'body', 'rating']
         widgets = {
             'headline': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Titre de la critique'}),
             'rating': forms.RadioSelect(),
