@@ -4,63 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}LITRevu{% endblock %}</title>
+    <title>{% block page_title %}LITRevu{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h2>Test de debug :</h2>
-    <p>Utilisateur connecté : {{ user.is_authenticated }}</p>
-    <p>Nom d'utilisateur : {{ user.username }}</p>
-
-    {% if user.is_authenticated %}
-    <header>
-        <nav class="navbar">
-            <div class="container">
-                <h1><a href="{% url 'homepage' %}">LITRevu</a></h1>
-                <ul class="nav-links">
-                    <li><a href="{% url 'feed' %}">Flux</a></li>
-                    <li><a href="{% url 'ticket-add' %}">Créer un ticket</a></li>
-                    <li><a href="{% url 'review-create' %}">Créer une critique</a></li>
-                    
-                    <!-- Lister les tickets de l'utilisateur pour créer une critique en réponse -->
-                    {% for ticket in user.tickets.all %}
-                        <li><a href="{% url 'review-add' ticket_id=ticket.pk %}">Créer une critique (en réponse à "{{ ticket.title }}")</a></li>
-                    {% endfor %}
-                    
-                    <!-- Liste des critiques de l'utilisateur avec liens pour modifier et supprimer -->
-                    {% for review in user.reviews.all %}
-                        <li><a href="{% url 'review-edit' pk=review.pk %}">Modifier la critique "{{ review.headline }}"</a></li>
-                        <li><a href="{% url 'review-delete' pk=review.pk %}" class="text-danger">Supprimer la critique "{{ review.headline }}"</a></li>
-                    {% endfor %}
-                    
-                    <!-- Liste des tickets de l'utilisateur avec liens pour modifier et supprimer -->
-                    {% for ticket in user.tickets.all %}
-                        <li><a href="{% url 'ticket-edit' pk=ticket.pk %}">Modifier le ticket "{{ ticket.title }}"</a></li>
-                        <li><a href="{% url 'ticket-delete' pk=ticket.pk %}" class="text-danger">Supprimer le ticket "{{ ticket.title }}"</a></li>
-                    {% endfor %}
-                    
-                    <li><a href="{% url 'follows_list' %}">Abonnements</a></li>
-                    <li>
-                        <form method="post" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-link">Se déconnecter</button>
-                        </form>
-                    </li>
-                </ul>
+    <!-- Wrapper principal pour centrer la page -->
+    <div class="page-wrapper">
+        <div class="page-border">
+            <!-- Conteneur du header pour centrer -->
+            <div class="site-header-container">
+                <header class="site-header">
+                    <div class="page-title">
+                        <h2>{% block title %}LITRevu{% endblock %}</h2>
+                    </div>
+                    <div class="navbar-container">
+                        <!-- Titre au centre -->
+                        <h1 class="site-title"><a href="{% url 'homepage' %}">LITRevu</a></h1>
+                    </div>
+                    <!-- Liens de navigation à droite -->
+                    {% if user.is_authenticated %}
+                    <nav class="navbar">
+                        <ul class="nav-links">
+                            <li><a href="{% url 'feed' %}">Flux</a></li>
+                            <li><a href="{% url 'ticket-add' %}">Posts</a></li>
+                            <li><a href="{% url 'follows_list' %}">Abonnements</a></li>
+                            <li>
+                                <form method="post" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-link">Se déconnecter</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </nav>
+                    {% endif %}
+                </header>
             </div>
-        </nav>
-    </header>
-    {% else %}
-        <p>Vous n'êtes pas connecté.</p>
-    {% endif %}
+            
+            <!-- Conteneur du contenu principal -->
+            <div class="main-container-wrapper">
+                <div class="main-container">
+                    {% block content %}
+                    <!-- Contenu principal rendu ici -->
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <main class="main-container">
-        {% block content %}
-        <!-- Contenu principal rendu ici -->
-        {% endblock %}
-    </main>
-
-    <footer>
+    <!-- Footer en dehors du wrapper principal pour l'isoler -->
+    <footer class="footer">
         <p>&copy; 2024 LITRevu</p>
     </footer>
 </body>

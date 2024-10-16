@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block page_title %}Connexion{% endblock %}
+
 {% block title %}Connexion{% endblock %}
 
 {% block content %}
@@ -7,7 +9,7 @@
     <h1>Connexion à LITRevu</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}  <!-- Génère automatiquement tous les champs du formulaire avec des balises <p> -->
+        {{ form.as_p }}  <!-- Formulaire généré automatiquement -->
         <button type="submit" class="btn btn-primary">Se connecter</button>
     </form>
     <a href="{% url 'signup' %}" class="btn btn-secondary">Pas encore inscrit ? S'inscrire</a>
