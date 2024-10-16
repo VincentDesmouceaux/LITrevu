@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Utilisateurs que vous suivez</h2>
+<ul>
+    {% for follow in following %}
+        <li>{{ follow.followed_user.username }} - 
+            <a href="{% url 'unfollow_user' follow.pk %}" class="btn btn-danger btn-sm">Désabonner</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<h2>Utilisateurs qui vous suivent</h2>
+<ul>
+    {% for follow in followers %}
+        <li>{{ follow.user.username }}</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'follow_user' %}" class="btn btn-primary">Suivre un nouvel utilisateur</a>
+{% endblock %}

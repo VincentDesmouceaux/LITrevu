@@ -39,7 +39,7 @@
                         <li><a href="{% url 'ticket-delete' pk=ticket.pk %}" class="text-danger">Supprimer le ticket "{{ ticket.title }}"</a></li>
                     {% endfor %}
                     
-                    <li><a href="#">Abonnements</a></li>
+                    <li><a href="{% url 'follows_list' %}">Abonnements</a></li>
                     <li>
                         <form method="post" action="{% url 'logout' %}">
                             {% csrf_token %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Abonnements</h1>
+
+<!-- Liste des lettres pour filtrer les utilisateurs -->
+<div>
+    <strong>Filtrer par lettre :</strong>
+    {% for letter in letters %}
+        <a href="{% url 'follow_user' %}?letter={{ letter }}">{{ letter }}</a>
+    {% endfor %}
+</div>
+
+<!-- Formulaire pour suivre un utilisateur -->
+<h2>Suivre un utilisateur</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Suivre</button>
+</form>
+
+<!-- Liste des utilisateurs que vous suivez -->
+<h2>Utilisateurs que vous suivez</h2>
+<ul>
+    {% for follow in following %}
+        <li>{{ follow.followed_user.username }} - <a href="{% url 'unfollow_user' follow.pk %}">Désabonner</a></li>
+    {% empty %}
+        <p>Vous ne suivez personne pour l'instant.</p>
+    {% endfor %}
+</ul>
+
+<!-- Liste des utilisateurs qui vous suivent -->
+<h2>Utilisateurs qui vous suivent</h2>
+<ul>
+    {% for follower in followers %}
+        <li>{{ follower.user.username }}</li>
+    {% empty %}
+        <p>Personne ne vous suit pour l'instant.</p>
+    {% endfor %}
+</ul>
+
+{% endblock %}

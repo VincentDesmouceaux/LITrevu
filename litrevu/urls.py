@@ -18,8 +18,9 @@ urlpatterns = [
     path('ticket/<int:pk>/delete/', TicketDeleteView.as_view(), name='ticket-delete'),
     path('ticket/<int:ticket_id>/review/add/', ReviewCreateView.as_view(), name='review-add'),
     path('review/create/', ReviewCreateWithoutTicketView.as_view(), name='review-create'),
-    path('review/<int:pk>/edit/', ReviewUpdateView.as_view(), name='review-edit'),  # Modification de la critique
+    path('review/<int:pk>/edit/', ReviewUpdateView.as_view(), name='review-edit'),
     path('review/<int:pk>/delete/', ReviewDeleteView.as_view(), name='review-delete'),
+    path('subscriptions/', include('subscriptions.urls')),  # Ajout des URLs de l'application "subscriptions"
 ]
 
 if settings.DEBUG:
