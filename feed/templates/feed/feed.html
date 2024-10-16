@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Votre flux</h1>
+
+<div class="flux-container">
+    {% for post in posts %}
+        {% if post.content_type == 'TICKET' %}
+            {% include 'feed/ticket_snippet.html' %}
+        {% elif post.content_type == 'REVIEW' %}
+            {% include 'feed/review_snippet.html' %}
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

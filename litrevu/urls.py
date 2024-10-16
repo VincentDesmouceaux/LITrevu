@@ -20,7 +20,8 @@ urlpatterns = [
     path('review/create/', ReviewCreateWithoutTicketView.as_view(), name='review-create'),
     path('review/<int:pk>/edit/', ReviewUpdateView.as_view(), name='review-edit'),
     path('review/<int:pk>/delete/', ReviewDeleteView.as_view(), name='review-delete'),
-    path('subscriptions/', include('subscriptions.urls')),  # Ajout des URLs de l'application "subscriptions"
+    path('subscriptions/', include('subscriptions.urls')),  # Abonnements
+    path('feed/', include('feed.urls')),  # Flux
 ]
 
 if settings.DEBUG:
