@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Vos posts</h1>
+
+<div class="user-posts-container">
+    {% for post in user_posts %}
+        {% if post.content_type == 'TICKET' %}
+            <div class="ticket">
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.description }}</p>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="Image du ticket" style="max-width: 100%; height: auto;">
+                {% endif %}
+                <p>Créé le {{ post.time_created }}</p>
+            </div>
+        {% elif post.content_type == 'REVIEW' %}
+            <div class="review">
+                <h2>Critique : {{ post.headline }}</h2>
+                <p>{{ post.body }}</p>
+                {% if post.ticket.image %}
+                    <img src="{{ post.ticket.image.url }}" alt="Image du ticket associé" style="max-width: 100%; height: auto;">
+                {% endif %}
+                <p>Critique en réponse à "{{ post.ticket.title }}"</p>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

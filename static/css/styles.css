@@ -58,6 +58,24 @@ a {
     border-right: 2px solid black;
 }
 
+.navbar-links {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    align-items: center;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+.navbar-links a:hover {
+    color: #007bff; /* Change the color on hover */
+}
+
+
 .site-title h1 {
     font-size: 36px;
     margin: 0;
@@ -69,7 +87,7 @@ a {
     flex-grow: 1;
     width: 100%;
     margin: 0;
-    border: 2px solid black;  /* Black border around the main container */
+    border: 2px solid black;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
@@ -87,7 +105,7 @@ a {
 /* Title centered horizontally and positioned higher */
 .homepage-title-container {
     text-align: center;
-    margin-bottom: 20px; /* Reduced margin */
+    margin-bottom: 20px;
 }
 
 /* Auth options */
@@ -96,12 +114,12 @@ a {
     justify-content: space-around;
     margin: 40px 0;
     width: 100%;
-    align-items: center; /* Vertically centers the content */
+    align-items: center;
 }
 
 /* Signup and login sections */
 .signup-section, .login-section {
-    width: 40%;  /* Slightly reduced width */
+    width: 40%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -110,7 +128,7 @@ a {
 /* Compact input fields */
 .form-group {
     margin-bottom: 15px;
-    width: 80%; /* Reduced width for input field sections */
+    width: 80%;
 }
 
 .form-input {
@@ -127,7 +145,7 @@ a {
     background-color: #ffffff;
     color: rgb(0, 0, 0);
     padding: 10px 20px;
-    border: 2px solid black;  /* Added black border */
+    border: 2px solid black;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -135,6 +153,38 @@ a {
 
 .btn-primary:hover {
     background-color: #f1f1f1;
+}
+
+/* Signup Page Specific Styles */
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    margin: 0 auto;
+}
+
+.signup-title {
+    margin-bottom: 30px;
+}
+
+.signup-form-group {
+    width: 100%;
+}
+
+.signup-form-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.signup-btn {
+    margin: 15px 0;
+    padding: 10px 20px;
 }
 
 /* Footer */

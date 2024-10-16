@@ -1,15 +1,13 @@
 <div class="ticket">
     <h2>{{ post.title }}</h2>
     <p>{{ post.description }}</p>
-    
-    <!-- Afficher l'image du ticket s'il y en a une -->
+
     {% if post.image %}
         <img src="{{ post.image.url }}" alt="Image du ticket" style="max-width: 100%; height: auto;">
     {% endif %}
-    
+
     <p>Créé par : {{ post.user.username }} le {{ post.time_created }}</p>
 
-    <!-- On affiche un lien pour créer une critique seulement si l'utilisateur n'a pas encore répondu -->
     {% if not post.has_user_reviewed %}
         <a href="{% url 'review-add' ticket_id=post.id %}" class="btn btn-primary">Créer une critique</a>
     {% endif %}

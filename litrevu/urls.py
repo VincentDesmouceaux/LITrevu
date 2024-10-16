@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from authentication.views import HomePageView
+from authentication.views import HomePageView, UserLoginView, UserLogoutView, UserSignUpView
 from reviews.views import (
     TicketCreateView, TicketUpdateView, TicketDeleteView,
     ReviewCreateView, ReviewUpdateView, ReviewDeleteView,
@@ -12,7 +12,9 @@ from reviews.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomePageView.as_view(), name='homepage'),
-    path('auth/', include('authentication.urls')),
+    path('auth/login/', UserLoginView.as_view(), name='login'),
+    path('auth/logout/', UserLogoutView.as_view(), name='logout'),
+    path('auth/signup/', UserSignUpView.as_view(), name='signup'),
     path('ticket/add/', TicketCreateView.as_view(), name='ticket-add'),
     path('ticket/<int:pk>/edit/', TicketUpdateView.as_view(), name='ticket-edit'),
     path('ticket/<int:pk>/delete/', TicketDeleteView.as_view(), name='ticket-delete'),

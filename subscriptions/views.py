@@ -30,7 +30,6 @@ class FollowsListView(LoginRequiredMixin, ListView):
         # Ajouter les données au contexte
         context['following'] = following
         context['followers'] = followers
-
         return context
 
     def get_queryset(self):
