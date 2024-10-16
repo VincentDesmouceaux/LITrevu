@@ -8,52 +8,67 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <!-- Wrapper principal pour centrer la page -->
-    <div class="page-wrapper">
-        <div class="page-border">
-            <!-- Conteneur du header pour centrer -->
-            <div class="site-header-container">
-                <header class="site-header">
-                    <div class="page-title">
-                        <h2>{% block title %}LITRevu{% endblock %}</h2>
-                    </div>
+    <!-- Page container -->
+    <div class="page-border">
+        <!-- Header container -->
+        <div class="site-header-container">
+            <header class="site-header">
+                <div class="page-title">
+                    <h2>{% block title %}Accueil{% endblock %}</h2>  <!-- Dynamic page title -->
+                </div>
+                <div class="navbar-wrapper">
                     <div class="navbar-container">
-                        <!-- Titre au centre -->
-                        <h1 class="site-title"><a href="{% url 'homepage' %}">LITRevu</a></h1>
+                        <!-- Centered title with black border -->
+                        <h1 class="site-title"><a href="/">LITRevu</a></h1>
                     </div>
-                    <!-- Liens de navigation à droite -->
-                    {% if user.is_authenticated %}
-                    <nav class="navbar">
-                        <ul class="nav-links">
-                            <li><a href="{% url 'feed' %}">Flux</a></li>
-                            <li><a href="{% url 'ticket-add' %}">Posts</a></li>
-                            <li><a href="{% url 'follows_list' %}">Abonnements</a></li>
-                            <li>
-                                <form method="post" action="{% url 'logout' %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn-link">Se déconnecter</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </nav>
-                    {% endif %}
-                </header>
-            </div>
-            
-            <!-- Conteneur du contenu principal -->
-            <div class="main-container-wrapper">
-                <div class="main-container">
-                    {% block content %}
-                    <!-- Contenu principal rendu ici -->
-                    {% endblock %}
+                </div>
+            </header>
+        </div>
+
+        <!-- Main content container -->
+        <main class="main-container-wrapper">
+            <div class="main-container">
+                <div class="homepage-container">
+                    <!-- Centered title -->
+                    <div class="homepage-title-container">
+                        <h1>Bienvenue sur LITRevu</h1>
+                    </div>
+
+                    <!-- Auth options (signup and login) -->
+                    <div class="auth-options">
+                        <!-- Signup section on the left -->
+                        <div class="signup-section">
+                            <h2>Inscrivez-vous maintenant</h2>
+                            <a href="/auth/signup/" class="btn btn-primary">S'inscrire</a>
+                        </div>
+
+                        <!-- Login section on the right -->
+                        <div class="login-section">
+                            <h2>Connectez-vous</h2>
+                            <form method="post" action="/auth/login/">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="...">
+                                <div class="form-group">
+                                    <label for="username">Nom d'utilisateur</label>
+                                    <input type="text" name="username" class="form-input" required="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Mot de passe</label>
+                                    <input type="password" name="password" class="form-input" required="">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Se connecter</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
-    <!-- Footer en dehors du wrapper principal pour l'isoler -->
-    <footer class="footer">
-        <p>&copy; 2024 LITRevu</p>
-    </footer>
+    <!-- Footer inside page-border -->
+    <div class="footer-container">
+        <footer class="footer">
+            <p>&copy; 2024 LITRevu</p>
+        </footer>
+    </div>
 </body>
 </html>

@@ -1,123 +1,148 @@
-/* Styles globaux */
+/* Global Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
     box-sizing: border-box;
-}
-
-/* Wrapper principal pour centrer tout le contenu de la page */
-.page-wrapper {
-    width: 100%;
-    max-width: 1200px;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    min-height: 100vh;
 }
 
-/* Conteneur principal avec la bordure */
+/* Remove intrinsic link decoration */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Main page container */
 .page-border {
     width: 100%;
-    border: 5px solid black;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 0;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    background-color: white;
+    justify-content: space-between;
 }
 
 /* Header */
 .site-header-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f1f1f1;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.site-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     width: 100%;
-    padding: 20px;
 }
 
 .page-title h2 {
+    font-size: 28px;
     margin: 0;
-    font-size: 24px;
+    padding: 10px 0;
+    text-align: left;
+}
+
+/* Navbar */
+.navbar-wrapper {
+    display: flex;
+    justify-content: center;
 }
 
 .navbar-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
 }
 
 .site-title h1 {
     font-size: 36px;
     margin: 0;
-    text-align: center;
-    flex-grow: 1;
 }
 
-/* Liens de navigation */
-.nav-links {
-    display: flex;
-    justify-content: flex-end;
-    gap: 20px;
-}
-
-.nav-links li {
-    list-style-type: none;
-}
-
-.nav-links a, .btn-link {
-    text-decoration: none;
-    color: #007bff;
-    font-size: 16px;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.nav-links a:hover, .btn-link:hover {
-    background-color: #e6f0ff;
-    color: #0056b3;
-}
-
-/* Contenu principal */
+/* Main content wrapper with black border */
 .main-container-wrapper {
+    padding: 20px;
+    flex-grow: 1;
+    width: 100%;
+    margin: 0;
+    border: 2px solid black;  /* Black border around the main container */
+    box-sizing: border-box;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    padding: 40px;
-    background-color: #fafafa;
+    align-items: center;
+    background-color: #fff;
 }
 
+/* Main content */
 .main-container {
     width: 100%;
-    max-width: 1000px;
-    background-color: white;
-    border-radius: 10px;
     padding: 20px;
     box-sizing: border-box;
+}
+
+/* Title centered horizontally and positioned higher */
+.homepage-title-container {
+    text-align: center;
+    margin-bottom: 20px; /* Reduced margin */
+}
+
+/* Auth options */
+.auth-options {
+    display: flex;
+    justify-content: space-around;
+    margin: 40px 0;
+    width: 100%;
+    align-items: center; /* Vertically centers the content */
+}
+
+/* Signup and login sections */
+.signup-section, .login-section {
+    width: 40%;  /* Slightly reduced width */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Compact input fields */
+.form-group {
+    margin-bottom: 15px;
+    width: 80%; /* Reduced width for input field sections */
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    padding: 10px 20px;
+    border: 2px solid black;  /* Added black border */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #f1f1f1;
 }
 
 /* Footer */
+.footer-container {
+    width: 100%;
+    text-align: center;
+}
+
 .footer {
     padding: 20px;
-    background-color: #f1f1f1;
-    color: #888;
-    border-top: 1px solid #e1e1e1;
-    width: 100%;
-    box-sizing: border-box;
-    text-align: center;
-    position: relative;
-    bottom: 0;
 }
