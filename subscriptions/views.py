@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from django.db.models.functions import Substr
+from django.http import JsonResponse
 from .models import UserFollows
 from .forms import FollowUserForm
 
@@ -14,20 +15,14 @@ User = get_user_model()
 
 class FollowsListView(LoginRequiredMixin, ListView):
     model = UserFollows
-    template_name = 'subscriptions/follows_list.html'
+    template_name = 'subscriptions/follow_user.html'  # Utiliser le template fusionné
     context_object_name = 'follows'
     login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # Liste des utilisateurs que l'on suit
         following = UserFollows.objects.filter(user=self.request.user)
-
-        # Liste des utilisateurs qui nous suivent
         followers = UserFollows.objects.filter(followed_user=self.request.user)
-
-        # Ajouter les données au contexte
         context['following'] = following
         context['followers'] = followers
         return context
@@ -52,27 +47,18 @@ class FollowUserView(LoginRequiredMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # Extraire les premières lettres des noms d'utilisateurs uniques en base de données
         letters = User.objects.annotate(
             first_letter=Substr('username', 1, 1)
         ).values_list('first_letter', flat=True).distinct().order_by('first_letter')
-
-        # Ajouter les lettres au contexte
         context['letters'] = letters
         return context
 
     def form_valid(self, form):
         followed_user = form.cleaned_data['username']
         if followed_user == self.request.user:
-            # Empêcher de suivre soi-même
             return redirect('follows_list')
-
-        # Empêcher de suivre deux fois le même utilisateur
         if UserFollows.objects.filter(user=self.request.user, followed_user=followed_user).exists():
             return redirect('follows_list')
-
-        # Créer la relation de suivi
         UserFollows.objects.create(user=self.request.user, followed_user=followed_user)
         return super().form_valid(form)
 
@@ -87,3 +73,18 @@ class UnfollowUserView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return UserFollows.objects.filter(user=self.request.user)
+
+# Vue pour la recherche d'utilisateurs via AJAX pour autocomplétion
+
+
+class UserSearchView(LoginRequiredMixin, ListView):
+    model = User
+    template_name = 'subscriptions/user_search.html'
+
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get('q', '')
+        if query:
+            users = User.objects.filter(username__icontains=query)[:5]
+            users_data = [{'username': user.username} for user in users]
+            return JsonResponse(users_data, safe=False)
+        return JsonResponse([], safe=False)

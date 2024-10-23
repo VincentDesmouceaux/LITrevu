@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from authentication.views import HomePageView, UserLoginView, UserLogoutView, UserSignUpView
+from authentication.views import HomePageView, UserLogoutView, UserSignUpView, UserLoginView  # Ajout de la vue UserLoginView
 from reviews.views import (
     TicketCreateView, TicketUpdateView, TicketDeleteView,
     ReviewCreateView, ReviewUpdateView, ReviewDeleteView,
@@ -12,7 +12,7 @@ from reviews.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomePageView.as_view(), name='homepage'),
-    path('auth/login/', UserLoginView.as_view(), name='login'),
+    path('auth/login/', UserLoginView.as_view(), name='login'),  # Réintégration de l'URL login
     path('auth/logout/', UserLogoutView.as_view(), name='logout'),
     path('auth/signup/', UserSignUpView.as_view(), name='signup'),
     path('ticket/add/', TicketCreateView.as_view(), name='ticket-add'),

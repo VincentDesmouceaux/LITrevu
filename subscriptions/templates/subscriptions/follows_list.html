@@ -1,21 +1,33 @@
 {% extends 'base.html' %}
 
+{% block page_title %}Abonnements{% endblock %}
+{% block title %}Abonnements{% endblock %}
+
 {% block content %}
-<h2>Utilisateurs que vous suivez</h2>
-<ul>
-    {% for follow in following %}
-        <li>{{ follow.followed_user.username }} - 
-            <a href="{% url 'unfollow_user' follow.pk %}" class="btn btn-danger btn-sm">Désabonner</a>
-        </li>
-    {% endfor %}
-</ul>
+<div class="subscription-page-container">
+    <h2 class="subscription-title">Abonnements</h2>
+    <div class="subscription-list">
+        {% for follow in following %}
+        <div class="subscription-list-item">
+            <div class="subscription-username">{{ follow.followed_user.username }}</div>
+            <div class="subscription-unsubscribe-btn">
+                <a href="{% url 'unfollow_user' follow.pk %}" class="btn btn-danger">Désabonner</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>Vous ne suivez personne pour l'instant.</p>
+        {% endfor %}
+    </div>
 
-<h2>Utilisateurs qui vous suivent</h2>
-<ul>
-    {% for follow in followers %}
-        <li>{{ follow.user.username }}</li>
-    {% endfor %}
-</ul>
-
-<a href="{% url 'follow_user' %}" class="btn btn-primary">Suivre un nouvel utilisateur</a>
+    <h2 class="subscription-title">Abonnés</h2>
+    <div class="follower-list">
+        {% for follower in followers %}
+        <div class="subscription-list-item">
+            <div class="subscription-username">{{ follower.user.username }}</div>
+        </div>
+        {% empty %}
+        <p>Personne ne vous suit pour l'instant.</p>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

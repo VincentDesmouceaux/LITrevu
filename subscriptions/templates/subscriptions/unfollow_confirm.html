@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-
+{% block page_title %}Abonnements{% endblock %}
+{% block title %}Abonnements{% endblock %}
 {% block content %}
 <h1>Confirmer le désabonnement de {{ object.followed_user.username }}</h1>
 <form method="post">

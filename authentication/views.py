@@ -2,6 +2,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import CreateView, TemplateView
 from django.contrib import messages
+from django.contrib.auth import login  # Ajout de cet import
 from .models import CustomUser
 from .forms import CustomUserCreationForm
 
@@ -40,8 +41,16 @@ class UserSignUpView(CreateView):
     success_url = reverse_lazy('feed')  # Redirection vers la page de flux après l'inscription
 
     def form_valid(self, form):
+        # Sauvegarde le nouvel utilisateur
         response = super().form_valid(form)
+
+        # Authentifie et connecte l'utilisateur
+        user = form.save()
+        login(self.request, user)  # Connexion automatique de l'utilisateur
+
+        # Message de succès
         messages.success(self.request, "Inscription réussie ! Bienvenue sur LITRevu.")
+
         return response
 
 

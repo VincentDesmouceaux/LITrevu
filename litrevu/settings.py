@@ -93,6 +93,7 @@ AUTH_USER_MODEL = 'authentication.CustomUser'
 
 LOGIN_REDIRECT_URL = 'homepage'  # Redirection après connexion
 LOGIN_URL = 'login'  # URL de connexion pour les utilisateurs non connectés
+LOGIN_REDIRECT_URL = 'feed'
 LOGOUT_REDIRECT_URL = 'homepage'  # Redirection après déconnexion
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

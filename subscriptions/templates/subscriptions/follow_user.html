@@ -1,41 +1,103 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<h1>Abonnements</h1>
+{% block page_title %}Gestion des abonnements{% endblock %}
+{% block title %}Gestion des abonnements{% endblock %}
 
-<!-- Liste des lettres pour filtrer les utilisateurs -->
-<div>
-    <strong>Filtrer par lettre :</strong>
-    {% for letter in letters %}
-        <a href="{% url 'follow_user' %}?letter={{ letter }}">{{ letter }}</a>
-    {% endfor %}
+{% block content %}
+<div class="subscription-container">
+    <!-- Section : Suivre d'autres utilisateurs -->
+    <div class="subscription-section">
+        <h2 class="subscription-title">Suivre d'autres utilisateurs</h2>
+        <div class="subscription-search-section">
+            <form method="post" class="subscription-search-form">
+                {% csrf_token %}
+                <div class="input-btn-container">
+                    <div class="input-container">
+                        <input type="text" name="search_user" id="search_user" placeholder="Rechercher un utilisateur" class="subscription-search-input" autocomplete="off">
+                        <div id="suggestions" class="suggestions-box"></div>
+                    </div>
+                    <div class="btn-container">
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Section : Abonnements -->
+    <div class="subscription-section">
+        <h2 class="subscription-title">Abonnements</h2>
+        <div class="subscription-list">
+            {% for follow in following %}
+            <div class="subscription-list-item {% if forloop.last %}border-bottom{% endif %} bordered-item">
+                <div class="subscription-info">
+                    <div class="subscription-content-left">
+                        <div class="subscription-username">{{ follow.followed_user.username }}</div>
+                    </div>
+                </div>
+                <!-- Bouton Désabonner collé à droite -->
+                <div class="subscription-content-right">
+                    <a href="{% url 'unfollow_user' follow.pk %}" class="btn btn-unsubscribe">Désabonner</a>
+                </div>
+            </div>
+            {% empty %}
+            <p>Vous ne suivez personne pour l'instant.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Section : Abonnés -->
+    <div class="subscription-section">
+        <h2 class="subscription-title">Abonnés</h2>
+        <div class="follower-list">
+            {% for follower in followers %}
+            <div class="subscription-list-item {% if forloop.last %}border-bottom{% endif %} bordered-item">
+                <div class="subscription-info">
+                    <div class="subscription-content-left">
+                        <div class="subscription-username">{{ follower.user.username }}</div>
+                    </div>
+                </div>
+                <div class="subscription-content-right"></div>
+            </div>
+            {% empty %}
+            <p>Personne ne vous suit pour l'instant.</p>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 
-<!-- Formulaire pour suivre un utilisateur -->
-<h2>Suivre un utilisateur</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Suivre</button>
-</form>
+<script>
+// Autocomplétion avec AJAX
+document.getElementById('search_user').addEventListener('input', function() {
+    const query = this.value;
+    if (query.length > 1) {
+        fetch(`/subscriptions/follow_search/?q=${query}`)
+        .then(response => response.json())
+        .then(data => {
+            let suggestions = document.getElementById('suggestions');
+            suggestions.innerHTML = '';
+            data.forEach(user => {
+                let div = document.createElement('div');
+                div.textContent = user.username;
+                div.classList.add('suggestion-item');
+                div.addEventListener('click', () => {
+                    document.getElementById('search_user').value = user.username;
+                    suggestions.innerHTML = '';
+                });
+                suggestions.appendChild(div);
+            });
+        });
+    }
+});
 
-<!-- Liste des utilisateurs que vous suivez -->
-<h2>Utilisateurs que vous suivez</h2>
-<ul>
-    {% for follow in following %}
-        <li>{{ follow.followed_user.username }} - <a href="{% url 'unfollow_user' follow.pk %}">Désabonner</a></li>
-    {% empty %}
-        <p>Vous ne suivez personne pour l'instant.</p>
-    {% endfor %}
-</ul>
+// Masquer la fenêtre d'autocomplétion en cliquant en dehors
+document.addEventListener('click', function(event) {
+    const searchInput = document.getElementById('search_user');
+    const suggestionsBox = document.getElementById('suggestions');
 
-<!-- Liste des utilisateurs qui vous suivent -->
-<h2>Utilisateurs qui vous suivent</h2>
-<ul>
-    {% for follower in followers %}
-        <li>{{ follower.user.username }}</li>
-    {% empty %}
-        <p>Personne ne vous suit pour l'instant.</p>
-    {% endfor %}
-</ul>
+    if (!searchInput.contains(event.target) && !suggestionsBox.contains(event.target)) {
+        suggestionsBox.innerHTML = ''; // Masquer la fenêtre
+    }
+});
+</script>
 {% endblock %}
