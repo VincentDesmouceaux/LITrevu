@@ -29,14 +29,16 @@
         <h2 class="subscription-title">Abonnements</h2>
         <div class="subscription-list">
             {% for follow in following %}
-            <div class="subscription-list-item {% if forloop.last %}border-bottom{% endif %} bordered-item">
-                <div class="subscription-info">
-                    <div class="subscription-content-left">
-                        <div class="subscription-username">{{ follow.followed_user.username }}</div>
+            <div class="subscription-row">
+                <div class="subscription-list-item {% if forloop.last %}border-bottom{% endif %} bordered-item">
+                    <div class="subscription-info">
+                        <div class="subscription-content-left">
+                            <div class="subscription-username">{{ follow.followed_user.username }}</div>
+                        </div>
                     </div>
                 </div>
-                <!-- Bouton Désabonner collé à droite -->
-                <div class="subscription-content-right">
+                <!-- Bouton Désabonner placé à droite avec une bordure gauche -->
+                <div class="subscription-unsubscribe">
                     <a href="{% url 'unfollow_user' follow.pk %}" class="btn btn-unsubscribe">Désabonner</a>
                 </div>
             </div>
@@ -51,13 +53,15 @@
         <h2 class="subscription-title">Abonnés</h2>
         <div class="follower-list">
             {% for follower in followers %}
-            <div class="subscription-list-item {% if forloop.last %}border-bottom{% endif %} bordered-item">
-                <div class="subscription-info">
-                    <div class="subscription-content-left">
-                        <div class="subscription-username">{{ follower.user.username }}</div>
+            <div class="subscription-row">
+                <div class="subscription-list-item {% if forloop.last %}border-bottom{% endif %} bordered-item">
+                    <div class="subscription-info">
+                        <div class="subscription-content-left">
+                            <div class="subscription-username">{{ follower.user.username }}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="subscription-content-right"></div>
+                <div class="subscription-unsubscribe"></div> <!-- Ajout d'une div vide pour maintenir l'alignement -->
             </div>
             {% empty %}
             <p>Personne ne vous suit pour l'instant.</p>

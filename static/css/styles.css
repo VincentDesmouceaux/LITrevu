@@ -263,3 +263,38 @@ a {
 .bordered-item:not(.border-bottom) {
     border-bottom: none;
 }
+
+/* Wrapper for each subscription row */
+.subscription-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Main content of the subscription item */
+.subscription-list-item {
+    flex-grow: 1;
+}
+
+/* Unsubscribe button section */
+.subscription-unsubscribe {
+    padding-left: 20px;
+    border-left: 2px solid black; /* Bordure gauche pour la séparation */
+    display: flex;
+    align-items: center;
+}
+
+/* Transparent button styling for "Désabonner" */
+.btn-unsubscribe {
+    background-color: transparent;
+    color: black;
+    border: 2px solid black;
+    padding: 5px 10px;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-unsubscribe:hover {
+    background-color: #f1f1f1;
+}
