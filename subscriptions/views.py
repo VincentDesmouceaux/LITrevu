@@ -2,9 +2,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, FormView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
-from django.shortcuts import redirect
-from django.db.models.functions import Substr
 from django.http import JsonResponse
+from django.core.exceptions import ImproperlyConfigured
 from .models import UserFollows
 from .forms import FollowUserForm
 
@@ -15,7 +14,7 @@ User = get_user_model()
 
 class FollowsListView(LoginRequiredMixin, ListView):
     model = UserFollows
-    template_name = 'subscriptions/follow_user.html'  # Utiliser le template fusionné
+    template_name = 'subscriptions/follow_user.html'
     context_object_name = 'follows'
     login_url = reverse_lazy('login')
 
@@ -23,68 +22,82 @@ class FollowsListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         following = UserFollows.objects.filter(user=self.request.user)
         followers = UserFollows.objects.filter(followed_user=self.request.user)
+        print(f"DEBUG: Following count: {following.count()}, Followers count: {followers.count()}")
         context['following'] = following
         context['followers'] = followers
+        context['form'] = FollowUserForm()  # Ajout du formulaire ici
+        print("DEBUG: Formulaire de suivi ajouté au contexte")
         return context
 
     def get_queryset(self):
-        return UserFollows.objects.filter(user=self.request.user)
+        queryset = UserFollows.objects.filter(user=self.request.user)
+        print(f"DEBUG: QuerySet pour les utilisateurs suivis récupéré: {queryset}")
+        return queryset
 
 # Vue pour ajouter un utilisateur suivi
 
 
 class FollowUserView(LoginRequiredMixin, FormView):
     form_class = FollowUserForm
-    template_name = 'subscriptions/follow_user.html'
     success_url = reverse_lazy('follows_list')
     login_url = reverse_lazy('login')
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        initial_letter = self.request.GET.get('letter')  # Récupère la lettre initiale si fournie
-        kwargs['initial_letter'] = initial_letter
-        return kwargs
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        letters = User.objects.annotate(
-            first_letter=Substr('username', 1, 1)
-        ).values_list('first_letter', flat=True).distinct().order_by('first_letter')
-        context['letters'] = letters
-        return context
-
     def form_valid(self, form):
-        followed_user = form.cleaned_data['username']
+        followed_user = form.cleaned_data['user_id']
+        print(f"DEBUG: Tentative de suivre l'utilisateur: {followed_user.username}")
         if followed_user == self.request.user:
-            return redirect('follows_list')
+            print("DEBUG: Tentative de se suivre soi-même détectée")
+            return JsonResponse({"error": "Vous ne pouvez pas vous suivre vous-même."}, status=400)
         if UserFollows.objects.filter(user=self.request.user, followed_user=followed_user).exists():
-            return redirect('follows_list')
-        UserFollows.objects.create(user=self.request.user, followed_user=followed_user)
-        return super().form_valid(form)
+            print("DEBUG: Cet utilisateur est déjà suivi")
+            return JsonResponse({"error": "Vous suivez déjà cet utilisateur."}, status=400)
 
-# Vue pour supprimer un utilisateur suivi
+        # Créer la relation de suivi
+        UserFollows.objects.create(user=self.request.user, followed_user=followed_user)
+        print(f"DEBUG: Utilisateur {followed_user.username} suivi avec succès")
+        return JsonResponse({"success": f"Vous suivez désormais {followed_user.username}."}, status=200)
+
+    def form_invalid(self, form):
+        print(f"DEBUG: Le formulaire est invalide - Erreurs: {form.errors}")
+        return JsonResponse({"error": "Formulaire invalide."}, status=400)
+
+    def get_template_names(self):
+        print("DEBUG: Tentative d'accès à un template dans une vue AJAX")
+        raise ImproperlyConfigured(
+            "Cette vue est destinée à traiter des requêtes AJAX et ne doit pas rendre de template."
+        )
+
+# Vue pour supprimer un utilisateur suivi sans confirmation
 
 
 class UnfollowUserView(LoginRequiredMixin, DeleteView):
     model = UserFollows
-    template_name = 'subscriptions/unfollow_user_confirm.html'
     success_url = reverse_lazy('follows_list')
     login_url = reverse_lazy('login')
 
+    def get(self, request, *args, **kwargs):
+        print(f"DEBUG: Tentative de désabonnement de l'utilisateur avec ID: {kwargs['pk']}")
+        return self.post(request, *args, **kwargs)
+
     def get_queryset(self):
-        return UserFollows.objects.filter(user=self.request.user)
+        queryset = UserFollows.objects.filter(user=self.request.user)
+        print(f"DEBUG: QuerySet pour les utilisateurs suivis récupéré: {queryset}")
+        return queryset
 
 # Vue pour la recherche d'utilisateurs via AJAX pour autocomplétion
 
 
 class UserSearchView(LoginRequiredMixin, ListView):
     model = User
-    template_name = 'subscriptions/user_search.html'
 
     def get(self, request, *args, **kwargs):
         query = request.GET.get('q', '')
+        print(f"DEBUG: Requête de recherche reçue avec la requête: '{query}'")
         if query:
             users = User.objects.filter(username__icontains=query)[:5]
-            users_data = [{'username': user.username} for user in users]
+            print(f"DEBUG: {users.count()} utilisateurs trouvés pour la requête '{query}'")
+            users_data = [{'username': user.username, 'id': user.id} for user in users]  # Inclure l'ID utilisateur
+            print(f"DEBUG: Données des utilisateurs retournées: {users_data}")
             return JsonResponse(users_data, safe=False)
+        print("DEBUG: Aucune requête de recherche valide, réponse vide retournée")
         return JsonResponse([], safe=False)

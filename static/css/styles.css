@@ -296,7 +296,7 @@ a {
     background-color: transparent;
     color: black;
     border: 2px solid black;
-    padding: 10px; /* Uniformiser le padding avec les rectangles utilisateurs */
+    padding: 11px; /* Uniformiser le padding avec les rectangles utilisateurs */
     text-align: center;
    border-left: none;
    

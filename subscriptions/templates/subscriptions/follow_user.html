@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block page_title %}Gestion des abonnements{% endblock %}
-{% block title %}Gestion des abonnements{% endblock %}
+{% block page_title %}Onglet d'abonnements{% endblock %}
+{% block title %}Onglet d'abonnements{% endblock %}
 
 {% block content %}
 <div class="subscription-container">
@@ -9,15 +9,18 @@
     <div class="subscription-section">
         <h2 class="subscription-title">Suivre d'autres utilisateurs</h2>
         <div class="subscription-search-section">
-            <form method="post" class="subscription-search-form">
+            <form method="post" id="follow-form" class="subscription-search-form">
                 {% csrf_token %}
                 <div class="input-btn-container">
                     <div class="input-container">
-                        <input type="text" name="search_user" id="search_user" placeholder="Rechercher un utilisateur" class="subscription-search-input" autocomplete="off">
+                        <input type="hidden" name="user_id" id="user_id">
+                        <input type="text" name="username" id="search_user" placeholder="Rechercher un utilisateur" class="subscription-search-input" autocomplete="off">
                         <div id="suggestions" class="suggestions-box"></div>
                     </div>
                     <div class="btn-container">
-                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                        <button type="submit" class="btn btn-primary">Envoyer
+                            
+                        </button>
                     </div>
                 </div>
             </form>
@@ -27,7 +30,7 @@
     <!-- Section : Abonnements -->
     <div class="subscription-section">
         <h2 class="subscription-title">Abonnements</h2>
-        <div class="subscription-list">
+        <div class="subscription-list" id="following-list">
             {% for follow in following %}
             <div class="subscription-row">
                 <div class="subscription-list-item {% if forloop.last %}border-bottom{% endif %} bordered-item">
@@ -39,7 +42,10 @@
                 </div>
                 <!-- Bouton Désabonner placé à droite avec une bordure gauche -->
                 <div class="subscription-unsubscribe">
-                    <a href="{% url 'unfollow_user' follow.pk %}" class="btn btn-unsubscribe">Désabonner</a>
+                    <form method="post" action="{% url 'unfollow_user' follow.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-unsubscribe">Désabonner</button>
+                    </form>
                 </div>
             </div>
             {% empty %}
@@ -61,7 +67,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="subscription-unsubscribe"></div> <!-- Ajout d'une div vide pour maintenir l'alignement -->
             </div>
             {% empty %}
             <p>Personne ne vous suit pour l'instant.</p>
@@ -74,24 +79,56 @@
 // Autocomplétion avec AJAX
 document.getElementById('search_user').addEventListener('input', function() {
     const query = this.value;
+    console.log("DEBUG: Input query:", query);
     if (query.length > 1) {
         fetch(`/subscriptions/follow_search/?q=${query}`)
         .then(response => response.json())
         .then(data => {
             let suggestions = document.getElementById('suggestions');
             suggestions.innerHTML = '';
+            console.log("DEBUG: Users found:", data);
             data.forEach(user => {
                 let div = document.createElement('div');
                 div.textContent = user.username;
                 div.classList.add('suggestion-item');
                 div.addEventListener('click', () => {
+                    console.log("DEBUG: User selected:", user.username);
                     document.getElementById('search_user').value = user.username;
+                    document.getElementById('user_id').value = user.id; // Assigner l'ID utilisateur
                     suggestions.innerHTML = '';
                 });
                 suggestions.appendChild(div);
             });
-        });
+        })
+        .catch(error => console.error('Erreur autocomplétion:', error));
     }
+});
+
+// Suivre un utilisateur via AJAX
+document.getElementById('follow-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    console.log("DEBUG: Form data being submitted (before fetch):", formData.get('user_id'));
+    
+    fetch('/subscriptions/follows/add/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("DEBUG: Response from server:", data);
+        if (data.success) {
+            alert(data.success);
+            location.reload();  // Recharge la page pour afficher la nouvelle liste des abonnements
+        } else if (data.error) {
+            alert(data.error);
+            console.log("DEBUG: Error in form submission:", data.error);
+        }
+    })
+    .catch(error => console.error('Erreur lors du suivi:', error));
 });
 
 // Masquer la fenêtre d'autocomplétion en cliquant en dehors
@@ -100,6 +137,7 @@ document.addEventListener('click', function(event) {
     const suggestionsBox = document.getElementById('suggestions');
 
     if (!searchInput.contains(event.target) && !suggestionsBox.contains(event.target)) {
+        console.log("DEBUG: Clicked outside suggestions, hiding them");
         suggestionsBox.innerHTML = ''; // Masquer la fenêtre
     }
 });
