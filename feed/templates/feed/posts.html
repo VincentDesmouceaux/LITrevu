@@ -1,29 +1,84 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<h1>Vos posts</h1>
+{% load static %}
 
-<div class="user-posts-container">
-    {% for post in user_posts %}
-        {% if post.content_type == 'TICKET' %}
-            <div class="ticket">
-                <h2>{{ post.title }}</h2>
-                <p>{{ post.description }}</p>
-                {% if post.image %}
-                    <img src="{{ post.image.url }}" alt="Image du ticket" style="max-width: 100%; height: auto;">
+{% block page_title %}Vos Posts{% endblock %}
+{% block title %}Vos Posts{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Vos posts</h1> <!-- Titre en dehors du main -->
+
+<main class="main-container-wrapper">
+    <div class="main-container">
+
+        <div class="user-posts-container">
+            <!-- Boucle sur chaque critique ou ticket publié -->
+            {% for post in user_posts %}
+                <!-- Si c'est une critique -->
+                {% if post.content_type == 'REVIEW' %}
+                <div class="post-card">
+                    <div class="post-content">
+                        <!-- Image du ticket à gauche -->
+                        {% if post.ticket.image %}
+                        <div class="ticket-image-container">
+                            <img src="{{ post.ticket.image.url }}" alt="Image du ticket" style="width: 150px; height: 150px; object-fit: contain; border-radius: 5px; border: 1px solid #ccc;">
+                        </div>
+                        {% endif %}
+
+                        <!-- Contenu de la critique à droite -->
+                        <div class="post-details">
+                            <div class="post-header">
+                                <span>Vous avez publié une critique</span>
+                                <span class="post-time">{{ post.time_created }}</span>
+                            </div>
+                            <div class="post-title-container">
+                                <h2 class="post-title">{{ post.headline }}</h2>
+                                <!-- Exemple de notation étoilée -->
+                                <div class="star-rating">★ ★ ★ ★ ☆</div>
+                            </div>
+                            <p class="post-description">{{ post.body }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Boutons Modifier et Supprimer pour la critique -->
+                    <div class="post-actions">
+                        <a href="{% url 'review-edit' post.id %}" class="btn btn-edit">Modifier</a>
+                        <a href="{% url 'review-delete' post.id %}" class="btn btn-delete">Supprimer</a>
+                    </div>
+                </div>
                 {% endif %}
-                <p>Créé le {{ post.time_created }}</p>
-            </div>
-        {% elif post.content_type == 'REVIEW' %}
-            <div class="review">
-                <h2>Critique : {{ post.headline }}</h2>
-                <p>{{ post.body }}</p>
-                {% if post.ticket.image %}
-                    <img src="{{ post.ticket.image.url }}" alt="Image du ticket associé" style="max-width: 100%; height: auto;">
+
+                <!-- Si c'est un ticket publié -->
+                {% if post.content_type == 'TICKET' %}
+                <div class="post-card">
+                    <div class="post-content">
+                        <!-- Image du ticket à gauche -->
+                        {% if post.image %}
+                        <div class="ticket-image-container">
+                            <img src="{{ post.image.url }}" alt="Image du ticket" style="width: 150px; height: 150px; object-fit: contain; border-radius: 5px; border: 1px solid #ccc;">
+                        </div>
+                        {% endif %}
+
+                        <!-- Contenu du ticket à droite -->
+                        <div class="post-details">
+                            <div class="post-header">
+                                <span>Vous avez publié un ticket</span>
+                                <span class="post-time">{{ post.time_created }}</span>
+                            </div>
+                            <h2 class="post-title">{{ post.title }}</h2>
+                        </div>
+                    </div>
+
+                    <!-- Boutons Modifier et Supprimer pour le ticket -->
+                    <div class="post-actions">
+                        <a href="{% url 'ticket-edit' post.id %}" class="btn btn-edit">Modifier</a>
+                        <a href="{% url 'ticket-delete' post.id %}" class="btn btn-delete">Supprimer</a>
+                    </div>
+                </div>
                 {% endif %}
-                <p>Critique en réponse à "{{ post.ticket.title }}"</p>
-            </div>
-        {% endif %}
-    {% endfor %}
-</div>
+            {% endfor %}
+        </div>
+
+    </div>
+</main>
 {% endblock %}

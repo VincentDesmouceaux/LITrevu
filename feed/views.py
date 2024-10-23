@@ -17,13 +17,13 @@ class FeedView(LoginRequiredMixin, ListView):
         # Billets créés par l'utilisateur ou par les utilisateurs qu'il suit
         tickets = Ticket.objects.filter(
             Q(user=self.request.user) |
-            Q(user__in=self.request.user.follows.all())
+            Q(user__in=self.request.user.follows.all())  # Correction : utilisation de __in
         ).annotate(content_type=Value('TICKET', CharField()))
 
         # Critiques créées par l'utilisateur, les utilisateurs qu'il suit, ou en réponse à ses billets
         reviews = Review.objects.filter(
             Q(user=self.request.user) |
-            Q(user__in=self.request.user.follows.all()) |
+            Q(user__in=self.request.user.follows.all()) |  # Correction : utilisation de __in
             Q(ticket__user=self.request.user)
         ).annotate(content_type=Value('REVIEW', CharField()))
 
@@ -48,7 +48,7 @@ class FeedView(LoginRequiredMixin, ListView):
 
 # Page PostView (voir uniquement les propres posts de l'utilisateur connecté)
 class PostView(LoginRequiredMixin, ListView):
-    template_name = 'posts/posts.html'
+    template_name = 'feed/posts.html'  # Corrected template path
     context_object_name = 'user_posts'
     login_url = reverse_lazy('login')  # Rediriger si non connecté
 

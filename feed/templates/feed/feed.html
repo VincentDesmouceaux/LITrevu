@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 
+{% load static %}  <!-- Ajout du load static pour charger les fichiers CSS -->
+
+{% block head %}
+<!-- Lien vers le fichier CSS spécifique au flux -->
+<link rel="stylesheet" href="{% static 'css/feed.css' %}">
+{% endblock %}
+
 {% block content %}
 <h1>Votre flux</h1>
 

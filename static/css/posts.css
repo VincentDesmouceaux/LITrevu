@@ -1,0 +1,89 @@
+/* Container principal pour les posts */
+.main-container-wrapper {
+    border: 2px solid #333;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 900px;
+    background-color: #f8f8f8;
+}
+
+.user-posts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.post-card {
+    border: 2px solid #333;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.post-content {
+    display: flex; /* Disposition en ligne */
+    gap: 20px;
+}
+
+/* Image du ticket */
+.ticket-image-container {
+    flex-shrink: 0;
+}
+
+.post-image {
+    width: 150px; /* Taille carrée */
+    height: 150px;
+    object-fit: contain; /* Conserve le ratio d'aspect */
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.post-details {
+    flex-grow: 1;
+}
+
+/* Contenu du post */
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.post-title {
+    font-size: 1.5rem;
+}
+
+.post-description {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* Boutons */
+.post-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+}
+
+.btn-edit {
+    background-color: #007bff;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+.star-rating {
+    color: #ffc107;
+    font-size: 1.2rem;
+}
