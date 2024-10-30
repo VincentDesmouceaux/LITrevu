@@ -1,0 +1,78 @@
+/* Container principal du formulaire */
+.ticket-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+/* Titre du formulaire centré */
+/* Centrer le texte du titre */
+.ticket-form-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Groupes de champs avec espace entre chaque */
+.ticket-form-group {
+    margin-bottom: 20px;
+}
+
+/* Étiquette de chaque champ */
+.ticket-form-label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Champ d'entrée stylisé */
+.ticket-form-field input[type="text"],
+.ticket-form-field textarea,
+.ticket-form-field input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+/* Texte de l'image actuelle */
+.ticket-image-text {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 10px;
+}
+
+/* Image actuelle */
+.ticket-current-image {
+    display: block;
+    max-width: 150px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Bouton de soumission aligné à droite */
+.submit-group {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.ticket-submit-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.ticket-submit-button:hover {
+    background-color: #0056b3;
+}

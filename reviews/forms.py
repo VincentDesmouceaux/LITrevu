@@ -7,11 +7,10 @@ from .models import Ticket, Review
 class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
-        fields = ['title', 'description', 'image']  # Les champs que tu veux exposer dans le formulaire
+        fields = ['title', 'description', 'image']
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Titre'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Description'}),
-            'image': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+            'title': forms.TextInput(attrs={'placeholder': 'Titre'}),
+            'description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Description'}),
         }
 
 # Formulaire pour la création/modification des critiques

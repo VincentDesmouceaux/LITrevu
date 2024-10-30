@@ -1,28 +1,39 @@
 {% load crispy_forms_tags %}
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" class="ticket-form">
     {% csrf_token %}
-    
+
     <!-- Champ pour le titre -->
-    <div class="form-group">
-        {{ form.title|as_crispy_field }}
+    <div class="ticket-form-group" style="margin-bottom: 20px;">
+        <label for="{{ form.title.id_for_label }}" style="font-weight: bold; margin-bottom: 8px; display: block;">{{ form.title.label }}</label>
+        <div class="ticket-form-field">
+            {{ form.title|as_crispy_field }}
+        </div>
     </div>
-    
+
     <!-- Champ pour la description -->
-    <div class="form-group mt-4">
-        {{ form.description|as_crispy_field }}
+    <div class="ticket-form-group" style="margin-bottom: 20px;">
+        <label for="{{ form.description.id_for_label }}" style="font-weight: bold; margin-bottom: 8px; display: block;">{{ form.description.label }}</label>
+        <div class="ticket-form-field">
+            {{ form.description|as_crispy_field }}
+        </div>
     </div>
-    
+
     <!-- Champ pour l'image -->
-    <div class="form-group mt-4">
-        {{ form.image|as_crispy_field }}
-        {% if form.image.value %}
-            <p class="mt-2">Image actuelle :</p>
-            <img src="{{ form.image.value.url }}" alt="{{ form.title.value }}" width="150">
-        {% endif %}
+    <div class="ticket-form-group" style="margin-bottom: 20px;">
+        <label for="{{ form.image.id_for_label }}" style="font-weight: bold; margin-bottom: 8px; display: block;">{{ form.image.label }}</label>
+        <div class="ticket-form-field">
+            {{ form.image|as_crispy_field }}
+            {% if form.image.value %}
+                <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">Image actuelle :</p>
+                <img src="{{ form.image.value.url }}" alt="{{ form.title.value }}" style="display: block; max-width: 150px; margin-top: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            {% endif %}
+        </div>
     </div>
-    
-    <!-- Bouton pour soumettre les modifications -->
-    <div class="form-group mt-4">
-        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+
+    <!-- Bouton de soumission aligné en bas à droite -->
+    <div class="ticket-form-group submit-group" style="display: flex; justify-content: flex-end;">
+        <button type="submit" style="padding: 10px 20px; font-size: 1rem; color: #fff; background-color: #007bff; border: none; border-radius: 4px; cursor: pointer;">
+            Enregistrer les modifications
+        </button>
     </div>
 </form>

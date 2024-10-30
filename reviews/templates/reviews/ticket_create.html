@@ -1,9 +1,14 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block title %}Créer un ticket{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/ticket_form.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="text-center">Créer un ticket</h2>
+<div class="ticket-form-container" style="max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;">
+    <h1 class="ticket-form-title" style="text-align: center; font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Créer un ticket</h1>
     {% include 'reviews/partials/_ticket_form.html' %}
 </div>
 {% endblock %}
