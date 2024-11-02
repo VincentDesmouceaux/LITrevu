@@ -9,8 +9,8 @@ class TicketForm(forms.ModelForm):
         model = Ticket
         fields = ['title', 'description', 'image']
         widgets = {
-            'title': forms.TextInput(attrs={'placeholder': 'Titre'}),
-            'description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Description'}),
+            'title': forms.TextInput(),
+            'description': forms.Textarea(attrs={'rows': 4}),
         }
 
 # Formulaire pour la création/modification des critiques
@@ -21,7 +21,7 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ['headline', 'body', 'rating']
         widgets = {
-            'headline': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Titre de la critique'}),
+            'headline': forms.TextInput(attrs={'class': 'form-control'}),
             'rating': forms.RadioSelect(),
-            'body': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Commentaire'}),
+            'body': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
         }

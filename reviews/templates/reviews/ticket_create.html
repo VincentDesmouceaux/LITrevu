@@ -7,8 +7,22 @@
 {% endblock %}
 
 {% block content %}
-<div class="ticket-form-container" style="max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;">
-    <h1 class="ticket-form-title" style="text-align: center; font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Créer un ticket</h1>
-    {% include 'reviews/partials/_ticket_form.html' %}
+<div class="form-wrapper" style="width: 100%; max-width: 800px; margin: 0 auto;">
+
+    <!-- Titre du formulaire placé plus haut avec un espace dédié -->
+    <div class="form-header-wrapper" style="display: flex; justify-content: center; margin-top: 60px;">
+        <div class="form-header" style="text-align: center; max-width: 100%; padding-bottom: 20px;">
+            <h1 class="ticket-form-title" style="font-size: 2rem; font-weight: bold; margin-top: 10px;">Créer un ticket</h1>
+        </div>
+    </div>
+
+    <!-- Conteneur principal du formulaire centré horizontalement et occupant toute la largeur disponible -->
+    <div class="form-container-wrapper" style="display: flex; justify-content: center; width: 100%;">
+        <div class="form-container" style="width: 100%; max-width: 800px;">
+            <div class="ticket-form-container" style="width: 100%; padding: 30px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;">
+                {% include 'reviews/partials/_ticket_form.html' %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
