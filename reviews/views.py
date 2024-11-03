@@ -12,7 +12,7 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     model = Review
     form_class = ReviewForm
     template_name = 'reviews/review_form_response.html'
-    success_url = reverse_lazy('homepage')
+    success_url = reverse_lazy('feed')
     login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
@@ -37,7 +37,7 @@ class ReviewCreateWithoutTicketView(LoginRequiredMixin, CreateView):
     model = Review
     form_class = ReviewForm
     template_name = 'reviews/review_create.html'
-    success_url = reverse_lazy('homepage')
+    success_url = reverse_lazy('feed')
     login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
@@ -78,7 +78,7 @@ class ReviewUpdateView(LoginRequiredMixin, UpdateView):
     model = Review
     form_class = ReviewForm
     template_name = 'reviews/review_edit.html'
-    success_url = reverse_lazy('homepage')
+    success_url = reverse_lazy('feed')
     login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
@@ -99,7 +99,7 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
     model = Ticket
     form_class = TicketForm
     template_name = 'reviews/ticket_create.html'
-    success_url = reverse_lazy('homepage')
+    success_url = reverse_lazy('feed')
     login_url = reverse_lazy('login')
 
     def form_valid(self, form):
@@ -114,7 +114,7 @@ class TicketUpdateView(LoginRequiredMixin, UpdateView):
     model = Ticket
     form_class = TicketForm
     template_name = 'reviews/ticket_edit.html'
-    success_url = reverse_lazy('homepage')
+    success_url = reverse_lazy('feed')
     login_url = reverse_lazy('login')
 
     def get_queryset(self):
@@ -127,7 +127,7 @@ class TicketUpdateView(LoginRequiredMixin, UpdateView):
 class TicketDeleteView(LoginRequiredMixin, DeleteView):
     model = Ticket
     template_name = 'reviews/ticket_confirm_delete.html'
-    success_url = reverse_lazy('homepage')
+    success_url = reverse_lazy('feed')
     login_url = reverse_lazy('login')
 
     def get_queryset(self):
@@ -140,7 +140,7 @@ class TicketDeleteView(LoginRequiredMixin, DeleteView):
 class ReviewDeleteView(LoginRequiredMixin, DeleteView):
     model = Review
     template_name = 'reviews/review_confirm_delete.html'
-    success_url = reverse_lazy('homepage')
+    success_url = reverse_lazy('feed')
     login_url = reverse_lazy('login')
 
     def get_queryset(self):

@@ -29,7 +29,7 @@ class Review(models.Model):
         blank=True
     )
     rating = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)]
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
     )
     headline = models.CharField(max_length=128)
     body = models.TextField(max_length=8192, blank=True)
