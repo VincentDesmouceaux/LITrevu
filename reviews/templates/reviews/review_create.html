@@ -1,69 +1,106 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% load static %}
 
-{% block title %}
-    Créer une critique - LITReview
+{% block title %}Créer une critique{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/ticket_form.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center">Créer une critique</h1>
+<div class="form-wrapper" style="width: 100%; max-width: 800px; margin: 0 auto; padding: 20px;">
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        <!-- Section Livre/Article -->
-        <div class="form-group mt-4">
-            <h2>Livre/Article</h2>
-            <label for="title">Titre</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ form.title.value|default_if_none:'' }}" placeholder="Titre du livre ou de l'article" required>
+    <!-- Titre principal de la page -->
+    <div class="form-header-wrapper" style="display: flex; justify-content: center; margin-top: 40px;">
+        <div class="form-header" style="text-align: center; width: 100%; padding-bottom: 20px;">
+            <h1 class="ticket-form-title" style="font-size: 2rem; font-weight: bold; margin-top: 10px;">Créer une critique</h1>
         </div>
+    </div>
 
-        <div class="form-group mt-4">
-            <label for="description">Description</label>
-            <textarea class="form-control" id="description" name="description" rows="5" placeholder="Description du livre ou de l'article" required>{{ form.description.value|default_if_none:'' }}</textarea>
-        </div>
+    <!-- Conteneur principal du formulaire -->
+    <div class="form-container-wrapper" style="display: flex; justify-content: center; width: 100%; margin-top: 20px;">
+        <div class="form-container" style="width: 100%; max-width: 800px;">
+            <div class="review-form-container" style="width: 100%; border-radius: 8px; border: 1px solid #000000; background-color: #ffffff;">
+                
+                <!-- Formulaire de création de critique -->
+                <form method="post" enctype="multipart/form-data" style="width: 100%;">
+                    {% csrf_token %}
 
-        <div class="form-group mt-4">
-            <label for="file">Télécharger le fichier</label>
-            <input type="file" class="form-control-file" id="file" name="file">
-        </div>
+                    <!-- Section Livre/Article -->
+                    <div class="form-section-wrapper" style="border-bottom: 2px solid #000;">
+                        <div class="form-section" style="padding: 40px;">
+                            <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;">Livre/Article</h2>
+                            
+                            <div class="review-form-group" style="margin-bottom: 25px;">
+                                <label for="title" style="font-weight: bold; margin-bottom: 12px; display: block;">Titre</label>
+                                <input type="text" id="title" name="title" class="form-control" value="{{ form.title.value|default_if_none:'' }}" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px;">
+                            </div>
 
-        <!-- Section Critique -->
-        <div class="form-group mt-5">
-            <h2>Critique</h2>
-            <label for="headline">Titre de la critique</label>
-            <input type="text" class="form-control" id="headline" name="headline" value="{{ form.headline.value|default_if_none:'' }}" placeholder="Titre de la critique" required>
-        </div>
+                            <div class="review-form-group" style="margin-bottom: 25px;">
+                                <label for="description" style="font-weight: bold; margin-bottom: 12px; display: block;">Description</label>
+                                <textarea id="description" name="description" class="form-control" rows="5" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px;">{{ form.description.value|default_if_none:'' }}</textarea>
+                            </div>
 
-        <div class="form-group mt-4">
-            <label for="body">Commentaire</label>
-            <textarea class="form-control" id="body" name="body" rows="5" placeholder="Votre commentaire" required>{{ form.body.value|default_if_none:'' }}</textarea>
-        </div>
-
-        <div class="form-group mt-4">
-            <label>Note</label>
-            <div class="d-flex justify-content-between rating-group">
-                {% for i in "012345" %}
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" {% if form.rating.value == i|stringformat:"s" %}checked{% endif %} required>
-                        <label class="form-check-label" for="rating-{{ i }}">{{ i }}</label>
+                            <!-- Bouton pour le fichier -->
+                            <div class="review-form-group" style="margin-bottom: 25px;">
+                                <label for="file" style="font-weight: bold; margin-bottom: 12px; display: block;">Image</label>
+                                <div class="ticket-form-field">
+                                    <label for="file" style="padding: 10px; background-color: #ffffff; color: #000; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; display: inline-block; text-align: center;">Télécharger fichier</label>
+                                    <input type="file" id="file" name="file" accept="image/*" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                {% endfor %}
+
+                    <!-- Section Critique -->
+                    <div class="form-section-wrapper">
+                        <div class="form-section" style="padding: 40px;">
+                            <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;">Critique</h2>
+                            
+                            <div class="review-form-group" style="margin-bottom: 25px;">
+                                <label for="headline" style="font-weight: bold; margin-bottom: 12px; display: block;">Titre de la critique</label>
+                                <input type="text" id="headline" name="headline" class="form-control" value="{{ form.headline.value|default_if_none:'' }}" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px;">
+                            </div>
+
+                            <!-- Note de la critique -->
+                            <div class="review-form-group" style="margin-bottom: 25px;">
+                                <label style="font-weight: bold; margin-bottom: 12px;">Note</label>
+                                <div class="rating-group" style="display: flex; justify-content: space-between;">
+                                    {% for i in "012345" %}
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" class="form-check-input" {% if form.rating.value == i|stringformat:"s" %}checked{% endif %} required>
+                                            <label for="rating-{{ i }}" class="form-check-label">{{ i }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="review-form-group" style="margin-bottom: 25px;">
+                                <label for="body" style="font-weight: bold; margin-bottom: 12px; display: block;">Commentaire</label>
+                                <textarea id="body" name="body" class="form-control" rows="5" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px;">{{ form.body.value|default_if_none:'' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bouton d'envoi -->
+                    <div class="ticket-form-group submit-group" style="display: flex; justify-content: flex-end; padding: 40px;">
+                        <button type="submit" class="btn btn-primary" style="padding: 12px 24px; font-size: 1rem; color: #000; background-color: #ffffff; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
+                            Envoyer
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Affichage des erreurs de formulaire -->
+                <div class="form-errors" style="margin-top: 20px;">
+                    {% if form.errors %}
+                        <ul class="text-danger" style="color: #dc3545;">
+                            {% for field, errors in form.errors.items %}
+                                <li>{{ field }}: {{ errors|join:", " }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
             </div>
         </div>
-
-        <button type="submit" class="btn btn-primary btn-block mt-4">Envoyer</button>
-    </form>
-    <div class="form-errors">
-        {% if form.errors %}
-            <ul class="text-danger">
-                {% for field, errors in form.errors.items %}
-                    <li>{{ field }}: {{ errors|join:", " }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
     </div>
-    
 </div>
 {% endblock %}

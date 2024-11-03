@@ -25,11 +25,11 @@ class Review(models.Model):
         to=Ticket,
         on_delete=models.CASCADE,
         related_name='reviews',
-        null=True,  # Permettre les valeurs nulles
-        blank=True  # Permettre le champ vide dans les formulaires
+        null=True,
+        blank=True
     )
     rating = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
     headline = models.CharField(max_length=128)
     body = models.TextField(max_length=8192, blank=True)

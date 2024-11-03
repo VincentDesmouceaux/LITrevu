@@ -14,24 +14,20 @@ class FeedView(LoginRequiredMixin, ListView):
     login_url = reverse_lazy('login')  # Rediriger si non connecté
 
     def get_queryset(self):
-        # Billets créés par l'utilisateur ou par les utilisateurs qu'il suit
         tickets = Ticket.objects.filter(
             Q(user=self.request.user) |
-            Q(user__in=self.request.user.follows.all())  # Correction : utilisation de __in
+            Q(user__in=self.request.user.follows.all())
         ).annotate(content_type=Value('TICKET', CharField()))
 
-        # Critiques créées par l'utilisateur, les utilisateurs qu'il suit, ou en réponse à ses billets
         reviews = Review.objects.filter(
             Q(user=self.request.user) |
-            Q(user__in=self.request.user.follows.all()) |  # Correction : utilisation de __in
+            Q(user__in=self.request.user.follows.all()) |
             Q(ticket__user=self.request.user)
         ).annotate(content_type=Value('REVIEW', CharField()))
 
-        # Bloquer la création de critiques pour les billets déjà commentés par l'utilisateur
         for ticket in tickets:
             ticket.has_user_reviewed = reviews.filter(ticket=ticket, user=self.request.user).exists()
 
-        # Combiner et trier les billets et les critiques par ordre antéchronologique
         posts = sorted(
             chain(tickets, reviews),
             key=lambda post: post.time_created,
@@ -45,22 +41,19 @@ class FeedView(LoginRequiredMixin, ListView):
         context['posts'] = self.get_queryset()
         return context
 
-
 # Page PostView (voir uniquement les propres posts de l'utilisateur connecté)
+
+
 class PostView(LoginRequiredMixin, ListView):
-    template_name = 'feed/posts.html'  # Corrected template path
+    template_name = 'feed/posts.html'
     context_object_name = 'user_posts'
     login_url = reverse_lazy('login')  # Rediriger si non connecté
 
     def get_queryset(self):
-        # Billets créés par l'utilisateur
         tickets = Ticket.objects.filter(user=self.request.user).annotate(content_type=Value('TICKET', CharField()))
-
-        # Critiques de l'utilisateur en réponse à ses propres billets
         reviews = Review.objects.filter(ticket__user=self.request.user).annotate(
             content_type=Value('REVIEW', CharField()))
 
-        # Combiner et trier les billets et les critiques par ordre antéchronologique
         user_posts = sorted(
             chain(tickets, reviews),
             key=lambda post: post.time_created,
@@ -72,4 +65,5 @@ class PostView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_posts'] = self.get_queryset()
+        context['rating_range'] = [1, 2, 3, 4, 5]  # Ajout pour simuler range(1, 6)
         return context
