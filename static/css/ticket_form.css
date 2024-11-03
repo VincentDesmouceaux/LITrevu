@@ -1,11 +1,11 @@
 /* Container principal du formulaire */
 .ticket-form-container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 30px;
-    border: 1px solid #ccc;
+   
     border-radius: 8px;
-    background-color: #f9f9f9;
+   
 }
 
 /* Titre du formulaire centré */
