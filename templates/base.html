@@ -19,7 +19,7 @@
                 <div class="navbar-wrapper">
                     <div class="navbar-container">
                         <!-- Centered title with black border -->
-                        <h1 class="site-title"><a href="/">LITRevu</a></h1>
+                        <h1 class="site-title"><a href="{% url 'feed' %}" style="font-size: larger;">LITRevu</a></h1>
                         
                         <!-- Display links if the user is authenticated -->
                         {% if user.is_authenticated %}
@@ -29,7 +29,7 @@
                             <a href="{% url 'follows_list' %}">Abonnements</a>
                             <form action="{% url 'logout' %}" method="post" style="display:inline;">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-link navbar-link" style="padding: 0; background: none; border: none; color: inherit;">
+                                <button type="submit" class="btn btn-link navbar-link" style="padding: 0; background: none; border: none; color: inherit; font-size:large;">
                                     Se déconnecter
                                 </button>
                             </form>
