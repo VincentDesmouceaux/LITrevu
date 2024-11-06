@@ -7,71 +7,84 @@
 <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center;">Vos posts</h1>
 
 <main style="display: flex; justify-content: center; padding: 20px;">
-    <div style="width: 100%; max-width: 800px;">
+    <div style="width: 100%; max-width: 800px; border: 1px solid black; border-radius: 5px;">
         <div>
-            {% for post in user_posts %}
-                {% if post.content_type == 'REVIEW' %}
-                <div style="border: 1px solid #ccc; border-radius: 10px; padding: 15px; margin-bottom: 20px; background-color: #f9f9f9;">
-                    <div style="display: flex; align-items: flex-start;">
-                        {% if post.ticket.image %}
-                        <div style="margin-right: 15px;">
-                            <img src="{{ post.ticket.image.url }}" alt="Image du ticket" style="width: 150px; height: 150px; object-fit: contain; border-radius: 5px; border: 1px solid #ccc;">
+            <!-- Affichage des critiques -->
+            {% for review in reviews %}
+                <div style="border-bottom: 1px solid black; padding: 15px;">
+                    <!-- Section critique -->
+                    <div style="display: flex; flex-direction: column; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="font-weight: bold;">Vous avez publié une critique</span>
+                            <span style="color: #000; font-size: 14px;">{{ review.time_created|date:"H:i, d F Y" }}</span>
+
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <h2 style="font-size: 20px; font-weight: bold; margin: 0;">{{ review.headline }}</h2>
+                            <div style="font-size: 20px; color: #000;">
+                                {% for i in rating_range %}
+                                    {% if i <= review.rating %}
+                                        ★
+                                    {% else %}
+                                        ☆
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p style="font-size: 16px; color: #000;">{{ review.body }}</p>
+                    </div>
+
+                    <!-- Section ticket associé -->
+                    <div style="border: 1px solid black; padding: 10px; margin-bottom: 10px;">
+                        <p style="font-weight: bold; margin: 0;">
+                            Ticket - 
+                            {% if review.ticket.user == request.user %}
+                                vous
+                            {% else %}
+                                {{ review.ticket.user.username }}
+                            {% endif %}
+                        </p>
+                        <h3 style="font-size: 18px; font-weight: bold; margin-top: 5px;">{{ review.ticket.title }}</h3>
+                        {% if review.ticket.image %}
+                        <div style="margin-top: 10px;">
+                            <img src="{{ review.ticket.image.url }}" alt="Image du ticket" style="width: 94px; height: 150px; object-fit: contain; border-radius: 5px; ">
                         </div>
                         {% endif %}
-
-                        <div style="flex-grow: 1;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                <span style="font-weight: bold;">Vous avez publié une critique</span>
-                                <span style="color: #888; font-size: 14px;">{{ post.time_created }}</span>
-                            </div>
-                            <div style="margin-bottom: 10px;">
-                                <h2 style="font-size: 20px; font-weight: bold; margin: 0;">{{ post.headline }}</h2>
-                                <div style="font-size: 20px; color: #ffd700;">
-                                    <!-- Affichage dynamique des étoiles -->
-                                    {% for i in rating_range %}
-                                        {% if i <= post.rating %}
-                                            ★
-                                        {% else %}
-                                            ☆
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <p style="font-size: 16px; color: #333;">{{ post.body }}</p>
-                        </div>
                     </div>
 
+                    <!-- Boutons d'actions -->
                     <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                        <a href="{% url 'review-edit' post.id %}" style="margin-right: 10px; padding: 8px 15px; background-color: #007bff; color: white; border-radius: 5px; text-decoration: none;">Modifier</a>
-                        <a href="{% url 'review-delete' post.id %}" style="padding: 8px 15px; background-color: #dc3545; color: white; border-radius: 5px; text-decoration: none;">Supprimer</a>
+                        <a href="{% url 'review-edit' review.id %}" style="margin-right: 10px; padding: 8px 15px; background-color: white; color: black; border-radius: 5px; text-decoration: none; border: 1px solid black;">Modifier</a>
+                        <a href="{% url 'review-delete' review.id %}" style="padding: 8px 15px; background-color: white; color: black; border-radius: 5px; text-decoration: none; border: 1px solid black;">Supprimer</a>
                     </div>
                 </div>
-                {% endif %}
+            {% endfor %}
 
-                {% if post.content_type == 'TICKET' %}
-                <div style="border: 1px solid #ccc; border-radius: 10px; padding: 15px; margin-bottom: 20px; background-color: #f9f9f9;">
+            <!-- Affichage des tickets -->
+            {% for ticket in tickets %}
+                <div style="border-bottom: 1px solid black; padding: 15px;">
                     <div style="display: flex; align-items: flex-start;">
-                        {% if post.image %}
+                        {% if ticket.image %}
                         <div style="margin-right: 15px;">
-                            <img src="{{ post.image.url }}" alt="Image du ticket" style="width: 150px; height: 150px; object-fit: contain; border-radius: 5px; border: 1px solid #ccc;">
+                            <img src="{{ ticket.image.url }}" alt="Image du ticket" style="width: 94px; height: 150px; object-fit: contain; border-radius: 5px; ">
                         </div>
                         {% endif %}
 
                         <div style="flex-grow: 1;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
                                 <span style="font-weight: bold;">Vous avez publié un ticket</span>
-                                <span style="color: #888; font-size: 14px;">{{ post.time_created }}</span>
+                                <span style="color: #000; font-size: 14px;">{{ ticket.time_created|date:"H:i, d M Y" }}</span>
                             </div>
-                            <h2 style="font-size: 20px; font-weight: bold; margin: 0;">{{ post.title }}</h2>
+                            <h2 style="font-size: 20px; font-weight: bold; margin: 0;">{{ ticket.title }}</h2>
                         </div>
                     </div>
 
+                    <!-- Boutons d'actions pour les tickets -->
                     <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                        <a href="{% url 'ticket-edit' post.id %}" style="margin-right: 10px; padding: 8px 15px; background-color: #007bff; color: white; border-radius: 5px; text-decoration: none;">Modifier</a>
-                        <a href="{% url 'ticket-delete' post.id %}" style="padding: 8px 15px; background-color: #dc3545; color: white; border-radius: 5px; text-decoration: none;">Supprimer</a>
+                        <a href="{% url 'ticket-edit' ticket.id %}" style="margin-right: 10px; padding: 8px 15px; background-color: white; color: black; border-radius: 5px; text-decoration: none; border: 1px solid black;">Modifier</a>
+                        <a href="{% url 'ticket-delete' ticket.id %}" style="padding: 8px 15px; background-color: white; color: black; border-radius: 5px; text-decoration: none; border: 1px solid black;">Supprimer</a>
                     </div>
                 </div>
-                {% endif %}
             {% endfor %}
         </div>
     </div>

@@ -47,23 +47,24 @@ class FeedView(LoginRequiredMixin, ListView):
 class PostView(LoginRequiredMixin, ListView):
     template_name = 'feed/posts.html'
     context_object_name = 'user_posts'
-    login_url = reverse_lazy('login')  # Rediriger si non connecté
+    login_url = reverse_lazy('login')
 
     def get_queryset(self):
-        tickets = Ticket.objects.filter(user=self.request.user).annotate(content_type=Value('TICKET', CharField()))
-        reviews = Review.objects.filter(ticket__user=self.request.user).annotate(
-            content_type=Value('REVIEW', CharField()))
+        # Critiques
+        reviews = Review.objects.filter(
+            Q(user=self.request.user) | Q(ticket__user=self.request.user)
+        ).annotate(content_type=Value('REVIEW', CharField())).order_by('-time_created')
 
-        user_posts = sorted(
-            chain(tickets, reviews),
-            key=lambda post: post.time_created,
-            reverse=True
-        )
+        # Tickets
+        tickets = Ticket.objects.filter(user=self.request.user).annotate(
+            content_type=Value('TICKET', CharField())).order_by('-time_created')
 
-        return user_posts
+        return {'reviews': reviews, 'tickets': tickets}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_posts'] = self.get_queryset()
-        context['rating_range'] = [1, 2, 3, 4, 5]  # Ajout pour simuler range(1, 6)
+        user_posts = self.get_queryset()
+        context['reviews'] = user_posts['reviews']
+        context['tickets'] = user_posts['tickets']
+        context['rating_range'] = [1, 2, 3, 4, 5]  # Pour afficher les étoiles dynamiquement
         return context
