@@ -6,7 +6,7 @@
     <div class="ticket-form-group" style="margin-bottom: 25px;">
         <label for="{{ form.title.id_for_label }}" style="font-weight: bold; margin-bottom: 12px; display: block;">Titre</label>
         <div class="ticket-form-field">
-            <input type="text" name="{{ form.title.name }}" id="{{ form.title.id_for_label }}" maxlength="128" required style="width: 100%; padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="text" name="{{ form.title.name }}" id="{{ form.title.id_for_label }}" maxlength="128" required value="{{ form.instance.title }}" style="width: 100%; padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; text-align: center;">
         </div>
     </div>
 
@@ -14,7 +14,7 @@
     <div class="ticket-form-group" style="margin-bottom: 25px;">
         <label for="{{ form.description.id_for_label }}" style="font-weight: bold; margin-bottom: 12px; display: block;">{{ form.description.label }}</label>
         <div class="ticket-form-field">
-            <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}" rows="4" maxlength="2048" style="width: 100%; padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+            <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}" rows="4" maxlength="2048" style="width: 100%; padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; text-align: center;"></textarea>
         </div>
     </div>
 
@@ -22,12 +22,13 @@
     <div class="ticket-form-group" style="margin-bottom: 25px;">
         <label for="{{ form.image.id_for_label }}" style="font-weight: bold; margin-bottom: 12px; display: block;">{{ form.image.label }}</label>
         <div class="ticket-form-field">
-            <label for="{{ form.image.id_for_label }}" style="padding: 10px; background-color: #fff; color: #000; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; display: inline-block; text-align: center;">Télécharger fichier</label>
-            <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" accept="image/*" style="display: none;">
             {% if form.image.value %}
-                <p style="font-size: 0.9rem; color: #666; margin-top: 12px;">Image actuelle :</p>
+                <!-- Affichage de l'image actuelle -->
                 <img src="{{ form.image.value.url }}" alt="{{ form.title.value }}" style="display: block; max-width: 150px; margin-top: 12px; border: 1px solid #ddd; border-radius: 4px;">
             {% endif %}
+            <!-- Bouton pour télécharger un nouveau fichier -->
+            <label for="{{ form.image.id_for_label }}" style="margin-top: 12px; padding: 10px; background-color: #fff; color: #000; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; display: inline-block; text-align: center;">Télécharger fichier</label>
+            <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" accept="image/*" style="display: none;">
         </div>
     </div>
 
