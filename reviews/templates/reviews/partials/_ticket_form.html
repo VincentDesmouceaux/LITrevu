@@ -14,7 +14,7 @@
     <div class="ticket-form-group" style="margin-bottom: 25px;">
         <label for="{{ form.description.id_for_label }}" style="font-weight: bold; margin-bottom: 12px; display: block;">{{ form.description.label }}</label>
         <div class="ticket-form-field">
-            <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}" rows="4" maxlength="2048" style="width: 100%; padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; text-align: center;"></textarea>
+            <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}" rows="4" maxlength="2048" style="width: 100%; padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"></textarea>
         </div>
     </div>
 
@@ -24,11 +24,14 @@
         <div class="ticket-form-field">
             {% if form.image.value %}
                 <!-- Affichage de l'image actuelle -->
-                <img src="{{ form.image.value.url }}" alt="{{ form.title.value }}" style="display: block; max-width: 150px; margin-top: 12px; border: 1px solid #ddd; border-radius: 4px;">
+                <img id="current-image" src="{{ form.image.value.url }}" alt="{{ form.title.value }}" style="display: block; max-width: 150px; margin-top: 12px; border: 1px solid #ddd; border-radius: 4px;">
+            {% else %}
+                <!-- Placeholder si aucune image n'est présente -->
+                <img id="current-image" src="" alt="Image prévisualisation" style="display: none; max-width: 150px; margin-top: 12px; border: 1px solid #ddd; border-radius: 4px;">
             {% endif %}
             <!-- Bouton pour télécharger un nouveau fichier -->
             <label for="{{ form.image.id_for_label }}" style="margin-top: 12px; padding: 10px; background-color: #fff; color: #000; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; display: inline-block; text-align: center;">Télécharger fichier</label>
-            <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" accept="image/*" style="display: none;">
+            <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" accept="image/*" style="display: none;" onchange="previewNewImage(event)">
         </div>
     </div>
 
@@ -39,3 +42,18 @@
         </button>
     </div>
 </form>
+
+<script>
+    function previewNewImage(event) {
+        const image = document.getElementById('current-image');
+        const file = event.target.files[0];
+
+        if (file) {
+            image.src = URL.createObjectURL(file);
+            image.style.display = 'block';
+        } else {
+            image.src = '';
+            image.style.display = 'none';
+        }
+    }
+</script>

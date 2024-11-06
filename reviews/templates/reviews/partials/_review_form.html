@@ -1,33 +1,51 @@
-{% load crispy_forms_tags %}
-
-
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" style="width: 100%;">
     {% csrf_token %}
-    
+
     <!-- Section Critique -->
-    <div class="form-group mt-5">
-        <h2>Critique</h2>
-        <label for="headline">Titre de la critique</label>
-        <input type="text" class="form-control" id="headline" name="headline" value="{{ form.headline.value|default_if_none:'' }}" placeholder="Titre de la critique" required>
-    </div>
+    <div class="form-section-wrapper" style="padding: 40px;">
+        <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;">Critique</h2>
 
-    <div class="form-group mt-4">
-        <label for="body">Commentaire</label>
-        <textarea class="form-control" id="body" name="body" rows="5" placeholder="Votre commentaire" required>{{ form.body.value|default_if_none:'' }}</textarea>
-    </div>
+        <!-- Champ pour le titre de la critique -->
+        <div class="review-form-group" style="margin-bottom: 25px;">
+            <label for="headline" style="font-weight: bold; margin-bottom: 12px; display: block;">Titre de la critique</label>
+            <input type="text" id="headline" name="headline" class="form-control" value="{{ form.headline.value|default_if_none:'' }}" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
 
-    <div class="form-group mt-4">
-        <label>Note</label>
-        <div class="d-flex justify-content-between rating-group">
-            {% for i in "012345" %}
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" {% if form.rating.value == i|stringformat:"s" %}checked{% endif %} required>
-                    <label class="form-check-label" for="rating-{{ i }}">{{ i }}</label>
-                </div>
-            {% endfor %}
+        <!-- Note de la critique -->
+        <div class="review-form-group" style="margin-bottom: 25px;">
+            <label style="font-weight: bold; margin-bottom: 12px;">Note</label>
+            <div class="rating-group" style="display: flex; justify-content: space-between;">
+                {% for i in "012345" %}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" class="form-check-input" {% if form.rating.value == i|stringformat:"s" %}checked{% endif %} required>
+                        <label for="rating-{{ i }}" class="form-check-label">{{ i }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Champ pour le commentaire -->
+        <div class="review-form-group" style="margin-bottom: 25px;">
+            <label for="body" style="font-weight: bold; margin-bottom: 12px; display: block;">Commentaire</label>
+            <textarea id="body" name="body" class="form-control" rows="5" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px;">{{ form.body.value|default_if_none:'' }}</textarea>
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary btn-block mt-4">Envoyer</button>
-</form>
+    <!-- Bouton d'envoi -->
+    <div class="ticket-form-group submit-group" style="display: flex; justify-content: flex-end; padding: 40px;">
+        <button type="submit" class="btn btn-primary" style="padding: 12px 24px; font-size: 1rem; color: #000; background-color: #ffffff; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
+            Envoyer
+        </button>
+    </div>
 
+    <!-- Affichage des erreurs de formulaire -->
+    <div class="form-errors" style="margin-top: 20px;">
+        {% if form.errors %}
+            <ul class="text-danger" style="color: #dc3545;">
+                {% for field, errors in form.errors.items %}
+                    <li>{{ field }}: {{ errors|join:", " }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</form>

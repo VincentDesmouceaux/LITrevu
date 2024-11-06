@@ -1,35 +1,65 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
 
-{% block title %}
-    Modifier votre critique - LITReview
-{% endblock %}
+{% block title %}Modifier votre critique - LITReview{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="text-center">Modifier votre critique</h2>
-    
-    <!-- Affichage du ticket lié à la critique -->
-    {% if ticket %}
-    <p>Vous êtes en train de modifier une critique en réponse à :</p>
-    <div class="ticket mb-4">
-        <h4>{{ ticket.title }}</h4>
-        <p><strong>Demandé par :</strong> {{ ticket.user.username }}</p>
-        <p>{{ ticket.description }}</p>
-        {% if ticket.image %}
-            <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" width="150">
-        {% else %}
-            <p>Aucune image disponible pour ce ticket.</p>
-        {% endif %}
-        <p><small>Créé le : {{ ticket.time_created|date:"d F Y H:i" }}</small></p>
+<div class="form-wrapper" style="width: 100%; max-width: 800px; margin: 0 auto; padding: 20px;">
+
+    <!-- Titre principal de la page -->
+    <div class="form-header-wrapper" style="display: flex; justify-content: center; margin-top: 40px;">
+        <div class="form-header" style="text-align: center; width: 100%; padding-bottom: 20px;">
+            <h1 class="ticket-form-title" style="font-size: 2rem; font-weight: bold; margin-top: 10px;">Modifier votre critique</h1>
+        </div>
     </div>
-{% else %}
-    <p>Aucun ticket associé à cette critique.</p>
-    <p>Ticket debug: {{ ticket }}</p>
-{% endif %}
 
+    <!-- Bloc principal englobant le ticket et le formulaire -->
+    <div class="content-block" style="border: 1px solid #000; border-radius: 8px; ">
 
+        <!-- Nouvelle div englobante avec bordure inférieure -->
+        <div class="context-ticket-wrapper" style="border-bottom: 1px solid #000; padding-bottom: 20px; margin-bottom: 20px;">
+            
+            <!-- Message indiquant le contexte de la critique -->
+            <div class="context-info" style="margin-bottom: 15px;">
+                <p style="font-weight: bold;">Vous êtes en train de poster en réponse à :</p>
+            </div>
 
-    <!-- Formulaire de modification de la critique -->
-    {% include 'reviews/partials/_review_form.html' %}
+            <!-- Bloc d'information du ticket avec bordure noire -->
+            {% if ticket %}
+            <div class="ticket-info" style="border: 1px solid #000; padding: 20px; border-radius: 8px; display: flex; justify-content: space-between; align-items: flex-start; margin: 20px;">
+
+                <!-- Partie gauche : Informations sur le ticket -->
+                <div class="ticket-details" style="flex: 1; margin-right: 20px;">
+                    <div class="ticket-title">
+                        <h4 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">{{ ticket.title }}</h4>
+                    </div>
+                    <div class="ticket-requester">
+                        <p><strong>Demandé par :</strong> {% if ticket.user.username == user.username %}vous{% else %}{{ ticket.user.username }}{% endif %}</p>
+                    </div>
+                    <div class="ticket-description">
+                        <p>{{ ticket.description }}</p>
+                    </div>
+                    {% if ticket.image %}
+                    <div class="ticket-image" style="margin-top: 15px;">
+                        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" width="78" height="125" style="border-radius: 4px; border: 1px solid #ddd;">
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Partie droite : Date et Heure -->
+                <div class="ticket-meta" style="text-align: right;">
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">
+                        <small>Créé le : {{ ticket.time_created|date:"H:i, d F Y" }}</small>
+                    </p>
+                </div>
+            </div>
+            {% else %}
+                <p>Aucun ticket associé à cette critique.</p>
+            {% endif %}
+        </div> <!-- Fin de la nouvelle div englobante -->
+
+        <!-- Formulaire de modification de la critique -->
+        {% include 'reviews/partials/_review_form.html' %}
+    </div>
 </div>
 {% endblock %}
