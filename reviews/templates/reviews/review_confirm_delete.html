@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}Confirmation de suppression{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <h2 class="text-center">Confirmation de suppression</h2>
-    {% include 'reviews/partials/_confirm_delete.html' %}
+<div class="d-flex justify-content-center align-items-center mt-5" style="flex-direction: column;">
+    <!-- Titre de confirmation centré horizontalement -->
+    <h2 style="font-weight: bold; font-size: 1.8rem; margin-bottom: 20px; text-align: center;">Confirmation de suppression</h2>
+
+    <!-- Inclusion du contenu partiel pour le formulaire de confirmation -->
+    <div class="delete-confirmation-container" style="display: flex; justify-content: center;">
+        {% include 'reviews/partials/_confirm_delete.html' %}
+    </div>
 </div>
 {% endblock %}
