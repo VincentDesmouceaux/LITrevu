@@ -1,50 +1,104 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}
-    Créer une critique en réponse à un billet - LITReview
+{% block title %}Créer une critique en réponse à un billet{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/ticket_form.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="text-center">Créer une critique</h2>
-    <p>Vous êtes en train de poster une critique en réponse à :</p>
+<div class="form-wrapper" style="width: 100%; max-width: 800px; margin: 0 auto; padding: 20px;">
 
-    <div class="ticket mb-4">
-        <h4>{{ ticket.title }}</h4>
-        <p><strong>Demandé par :</strong> {{ ticket.user.username }}</p>
-        <p>{{ ticket.description }}</p>
-        {% if ticket.image %}
-        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" width="150">
-    {% endif %}
-    
-        <p><small>Créé le : {{ ticket.time_created|date:"d F Y H:i" }}</small></p>
+    <!-- Titre principal de la page -->
+    <div class="form-header-wrapper" style="display: flex; justify-content: center; margin-top: 40px;">
+        <div class="form-header" style="text-align: center; width: 100%; padding-bottom: 20px;">
+            <h1 class="ticket-form-title" style="font-size: 2rem; font-weight: bold; margin-top: 10px;">Créer une critique</h1>
+        </div>
     </div>
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="headline">Titre de la critique</label>
-            <input type="text" class="form-control" id="headline" name="headline" placeholder="Titre de la critique" required>
-        </div>
+    <!-- Bloc principal englobant le billet et le formulaire -->
+    <div class="content-block" style="border: 1px solid #000; border-radius: 8px;">
 
-        <div class="form-group mt-4">
-            <label for="body">Description</label>
-            <textarea class="form-control" id="body" name="body" rows="5" placeholder="Votre commentaire" required></textarea>
-        </div>
+        <!-- Contexte du billet -->
+        <div class="context-ticket-wrapper" style="border-bottom: 1px solid #000; padding-bottom: 20px; margin-bottom: 20px;">
+            <div class="context-info" style="margin-bottom: 15px;">
+                <p style="font-weight: bold;">Vous êtes en train de poster une critique en réponse à :</p>
+            </div>
 
-        <div class="form-group mt-4">
-            <label>Note</label>
-            <div class="d-flex justify-content-between rating-group">
-                {% for i in rating_range %}
-                    <div>
-                        <input type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" required>
-                        <label for="rating-{{ i }}">{{ i }}</label>
+            <div class="ticket-info" style="border: 1px solid #000; padding: 20px; border-radius: 8px; display: flex; justify-content: space-between; align-items: flex-start; margin: 20px;">
+                <!-- Partie gauche : Informations sur le billet -->
+                <div class="ticket-details" style="flex: 1; margin-right: 20px;">
+                    <h4 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">{{ ticket.title }}</h4>
+                    <p><strong>Demandé par :</strong> {% if ticket.user.username == user.username %}vous{% else %}{{ ticket.user.username }}{% endif %}</p>
+                    <p>{{ ticket.description }}</p>
+                    {% if ticket.image %}
+                    <div class="ticket-image" style="margin-top: 15px;">
+                        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" width="78" height="125" style="border-radius: 4px; border: 1px solid #ddd;">
                     </div>
-                {% endfor %}
+                    {% endif %}
+                </div>
+
+                <!-- Partie droite : Date et Heure -->
+                <div class="ticket-meta" style="text-align: right;">
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">
+                        <small>Créé le : {{ ticket.time_created|date:"H:i, d F Y" }}</small>
+                    </p>
+                </div>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block mt-4">Envoyer</button>
-    </form>
+        <!-- Formulaire de création de la critique -->
+        <form method="post" enctype="multipart/form-data" style="width: 100%;">
+            {% csrf_token %}
+
+            <!-- Section Critique -->
+            <div class="form-section-wrapper">
+                <div class="form-section" style="padding: 40px;">
+                    <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;">Critique</h2>
+
+                    <div class="review-form-group" style="margin-bottom: 25px;">
+                        <label for="headline" style="font-weight: bold; margin-bottom: 12px; display: block;">Titre de la critique</label>
+                        <input type="text" id="headline" name="headline" class="form-control" value="{{ form.headline.value|default_if_none:'' }}" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px;">
+                    </div>
+
+                    <!-- Note de la critique -->
+                    <div class="review-form-group" style="margin-bottom: 25px;">
+                        <label style="font-weight: bold; margin-bottom: 12px;">Note</label>
+                        <div class="rating-group" style="display: flex; justify-content: space-between;">
+                            {% for i in "012345" %}
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="rating-{{ i }}" name="rating" value="{{ i }}" class="form-check-input" {% if form.rating.value == i|stringformat:"s" %}checked{% endif %} required>
+                                    <label for="rating-{{ i }}" class="form-check-label">{{ i }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="review-form-group" style="margin-bottom: 25px;">
+                        <label for="body" style="font-weight: bold; margin-bottom: 12px; display: block;">Commentaire</label>
+                        <textarea id="body" name="body" class="form-control" rows="5" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px;">{{ form.body.value|default_if_none:'' }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bouton d'envoi -->
+            <div class="ticket-form-group submit-group" style="display: flex; justify-content: flex-end; padding: 40px;">
+                <button type="submit" class="btn btn-primary" style="padding: 12px 24px; font-size: 1rem; color: #000; background-color: #ffffff; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
+                    Envoyer
+                </button>
+            </div>
+        </form>
+
+        <!-- Affichage des erreurs de formulaire -->
+        <div class="form-errors" style="margin-top: 20px;">
+            {% if form.errors %}
+                <ul class="text-danger" style="color: #dc3545;">
+                    {% for field, errors in form.errors.items %}
+                        <li>{{ field }}: {{ errors|join:", " }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}
