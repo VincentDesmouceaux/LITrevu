@@ -16,6 +16,6 @@ exclude =
     *.log,
     staticfiles/*,
     node_modules/*
-ignore = E501  # Ignorer les lignes trop longues
+ignore = E501, W503, W504
 format = html
 htmldir = flake8-report

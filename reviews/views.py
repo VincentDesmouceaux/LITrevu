@@ -22,7 +22,7 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         """
-        Ajoute le contexte du ticket associé pour que le formulaire de critique 
+        Ajoute le contexte du ticket associé pour que le formulaire de critique
         puisse afficher les détails du ticket.
         """
         context = super().get_context_data(**kwargs)
@@ -47,7 +47,7 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
 
 class ReviewCreateWithoutTicketView(LoginRequiredMixin, CreateView):
     """
-    Vue pour créer une critique sans ticket associé. Un ticket est créé avec 
+    Vue pour créer une critique sans ticket associé. Un ticket est créé avec
     la critique pour permettre le suivi.
     """
     model = Review
@@ -152,7 +152,7 @@ class ReviewDeleteView(LoginRequiredMixin, DeleteView):
 
 class TicketCreateView(LoginRequiredMixin, CreateView):
     """
-    Vue pour créer un nouveau billet. Associe le billet à l'utilisateur 
+    Vue pour créer un nouveau billet. Associe le billet à l'utilisateur
     connecté avant de l'enregistrer.
     """
     model = Ticket
@@ -174,7 +174,7 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
 
 class TicketUpdateView(LoginRequiredMixin, UpdateView):
     """
-    Vue pour modifier un billet existant. Limite les billets modifiables 
+    Vue pour modifier un billet existant. Limite les billets modifiables
     à ceux de l'utilisateur connecté.
     """
     model = Ticket
@@ -195,7 +195,7 @@ class TicketUpdateView(LoginRequiredMixin, UpdateView):
 
 class TicketDeleteView(LoginRequiredMixin, DeleteView):
     """
-    Vue pour supprimer un billet existant. Limite les billets supprimables 
+    Vue pour supprimer un billet existant. Limite les billets supprimables
     à ceux de l'utilisateur connecté.
     """
     model = Ticket
