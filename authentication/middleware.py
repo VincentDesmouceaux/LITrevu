@@ -1,5 +1,3 @@
-# authentication/middleware.py
-
 import datetime
 from django.conf import settings
 from django.contrib.auth import logout
@@ -7,7 +5,17 @@ from django.utils.deprecation import MiddlewareMixin
 
 
 class AutoLogoutMiddleware(MiddlewareMixin):
+    """
+    Middleware pour la déconnexion automatique après une période d'inactivité.
+
+    Méthodes:
+        process_request (request): Vérifie la dernière activité et déconnecte si inactive.
+    """
+
     def process_request(self, request):
+        """
+        Gère la déconnexion de l'utilisateur si la période d'inactivité dépasse SESSION_COOKIE_AGE.
+        """
         if not request.user.is_authenticated:
             return
 

@@ -1,34 +1,42 @@
 {% extends 'base.html' %}
 
 {% block page_title %}Inscription{% endblock %}
-
 {% block title %}Inscription{% endblock %}
 
 {% block content %}
+<!-- Container principal pour le formulaire d'inscription -->
 <div class="signup-container">
+    
+    <!-- Titre de la page d'inscription -->
     <h1 class="signup-title">Inscrivez-vous</h1>
 
+    <!-- Formulaire d'inscription avec CSRF token pour la sécurité -->
     <form method="post" class="signup-form">
         {% csrf_token %}
         
+        <!-- Champ pour le nom d'utilisateur -->
         <div class="form-group signup-form-group">
             <label for="id_username">Nom d'utilisateur</label>
             <input type="text" name="username" maxlength="150" required id="id_username" class="form-input signup-form-input">
         </div>
 
+        <!-- Champ pour le mot de passe -->
         <div class="form-group signup-form-group">
             <label for="id_password1">Mot de passe</label>
             <input type="password" name="password1" required id="id_password1" class="form-input signup-form-input">
         </div>
 
+        <!-- Champ pour confirmer le mot de passe -->
         <div class="form-group signup-form-group">
             <label for="id_password2">Confirmer le mot de passe</label>
             <input type="password" name="password2" required id="id_password2" class="form-input signup-form-input">
         </div>
 
+        <!-- Bouton de soumission du formulaire d'inscription -->
         <button type="submit" class="btn btn-primary signup-btn">S'inscrire</button>
     </form>
 
+    <!-- Lien pour retourner à la page d'accueil -->
     <a href="{% url 'homepage' %}" class="btn btn-secondary signup-btn">Retourner à la page d'accueil</a>
 </div>
 {% endblock %}

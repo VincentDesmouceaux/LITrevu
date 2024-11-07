@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 
 {% block page_title %}Accueil{% endblock %}
-
 {% block title %}Accueil{% endblock %}
 
 {% block content %}
+<!-- Conteneur principal de la page d'accueil -->
 <div class="homepage-container">
-    <!-- Centered title -->
+
+    <!-- Titre principal de la page d'accueil, centré -->
     <div class="homepage-title-container">
         <h1>Bienvenue sur LITRevu</h1>
     </div>
 
-    <!-- Affichage des messages d'erreur s'il y en a -->
+    <!-- Affichage des messages d'erreur, si présents -->
     {% if messages %}
     <div class="error-messages">
         {% for message in messages %}
@@ -20,17 +21,20 @@
     </div>
     {% endif %}
 
-    <!-- Auth options (signup and login) -->
+    <!-- Options d'authentification : inscription et connexion -->
     <div class="auth-options">
-        <!-- Signup section on the left -->
+
+        <!-- Section d'inscription à gauche -->
         <div class="signup-section">
             <h2>Inscrivez-vous maintenant</h2>
             <a href="{% url 'signup' %}" class="btn btn-primary">S'inscrire</a>
         </div>
 
-        <!-- Login section on the right -->
+        <!-- Section de connexion à droite -->
         <div class="login-section">
             <h2>Connectez-vous</h2>
+            
+            <!-- Formulaire de connexion rapide -->
             <form method="post" action="{% url 'login' %}">
                 {% csrf_token %}
                 <div class="form-group">
