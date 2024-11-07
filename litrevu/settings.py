@@ -1,7 +1,14 @@
+# settings.py
+
 from pathlib import Path
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Ajoutez ceci pour gérer la durée de session inactive
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 1200  # 20 minutes en secondes
+SESSION_SAVE_EVERY_REQUEST = True  # Sauvegarde la session à chaque requête, ce qui remet le timer à zéro
 
 SECRET_KEY = 'django-insecure-nca2^9!dnet+4q@oyvz&f0^gm!!we%5$d3ai%5p4b#$(je0*or'
 
@@ -32,6 +39,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'authentication.middleware.AutoLogoutMiddleware',
 ]
 
 ROOT_URLCONF = 'litrevu.urls'

@@ -25,9 +25,11 @@ class FeedView(LoginRequiredMixin, ListView):
             Q(ticket__user=self.request.user)
         ).annotate(content_type=Value('REVIEW', CharField()))
 
+        # Ajouter un indicateur pour vérifier si l'utilisateur connecté a déjà posté une critique
         for ticket in tickets:
             ticket.has_user_reviewed = reviews.filter(ticket=ticket, user=self.request.user).exists()
 
+        # Fusionner et trier les tickets et critiques
         posts = sorted(
             chain(tickets, reviews),
             key=lambda post: post.time_created,
@@ -39,6 +41,7 @@ class FeedView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['posts'] = self.get_queryset()
+        context['rating_range'] = [1, 2, 3, 4, 5]  # Pour afficher les étoiles
         return context
 
 # Page PostView (voir uniquement les propres posts de l'utilisateur connecté)

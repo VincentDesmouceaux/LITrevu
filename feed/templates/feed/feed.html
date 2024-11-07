@@ -1,22 +1,26 @@
 {% extends 'base.html' %}
 
-{% load static %}  <!-- Ajout du load static pour charger les fichiers CSS -->
+{% load static %}
 
 {% block head %}
-<!-- Lien vers le fichier CSS spécifique au flux -->
 <link rel="stylesheet" href="{% static 'css/feed.css' %}">
 {% endblock %}
 
 {% block content %}
-<h1>Votre flux</h1>
+<div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 40px;">
+    <a href="{% url 'review-create' %}" style="padding: 10px 20px; background-color: white; color: black; text-decoration: none; border-radius: 5px; border: 1px solid black;">Créer une critique</a>
+    <a href="{% url 'ticket-add' %}" style="padding: 10px 20px; background-color: white; color: black; text-decoration: none; border-radius: 5px; border: 1px solid black;">Créer un post</a>
+</div>
 
-<div class="flux-container">
+<div class="flux-container" style="max-width: 800px; margin: 0 auto;">
     {% for post in posts %}
-        {% if post.content_type == 'TICKET' %}
-            {% include 'feed/ticket_snippet.html' %}
-        {% elif post.content_type == 'REVIEW' %}
-            {% include 'feed/review_snippet.html' %}
-        {% endif %}
+        <div style="margin-bottom: 20px; border: 1px solid black; border-radius: 5px; padding: 15px;">
+            {% if post.content_type == 'TICKET' %}
+                {% include 'feed/ticket_snippet.html' %}
+            {% elif post.content_type == 'REVIEW' %}
+                {% include 'feed/review_snippet.html' %}
+            {% endif %}
+        </div>
     {% endfor %}
 </div>
 {% endblock %}

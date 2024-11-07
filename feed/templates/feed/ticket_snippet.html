@@ -1,14 +1,22 @@
 <div class="ticket">
-    <h2>{{ post.title }}</h2>
-    <p>{{ post.description }}</p>
-
-    {% if post.image %}
-        <img src="{{ post.image.url }}" alt="Image du ticket" class="post-image ticket-image">
-    {% endif %}
-
-    <p>Créé par : {{ post.user.username }} le {{ post.time_created }}</p>
-
-    {% if not post.has_user_reviewed %}
-        <a href="{% url 'review-add' ticket_id=post.id %}" class="btn btn-primary">Créer une critique</a>
-    {% endif %}
+    <div style="display: flex; align-items: flex-start;">
+        {% if post.image %}
+            <div style="margin-right: 15px;">
+                <img src="{{ post.image.url }}" alt="Image du ticket" style="width: 94px; height: 150px; object-fit: contain; border-radius: 5px;">
+            </div>
+        {% endif %}
+        <div style="flex-grow: 1;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-weight: bold;">Ticket de {{ post.user.username }}</span>
+                <span style="color: #000; font-size: 14px;">{{ post.time_created|date:"H:i, d M Y" }}</span>
+            </div>
+            <h2 style="font-size: 20px; font-weight: bold; margin: 0;">{{ post.title }}</h2>
+            <p style="font-size: 16px; color: #000; margin-top: 10px;">{{ post.description }}</p>
+            <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                {% if not post.has_user_reviewed %}
+                    <a href="{% url 'review-add' ticket_id=post.id %}" style="padding: 8px 15px; background-color: white; color: black; border-radius: 5px; text-decoration: none; border: 1px solid black;">Demander une critique</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
