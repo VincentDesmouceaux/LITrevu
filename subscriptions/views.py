@@ -13,23 +13,33 @@ User = get_user_model()
 
 
 class FollowsListView(LoginRequiredMixin, ListView):
+    """
+    Vue pour afficher la liste des utilisateurs suivis par l'utilisateur connecté
+    ainsi que ceux qui le suivent. Fournit un formulaire pour ajouter des abonnements.
+    """
     model = UserFollows
     template_name = 'subscriptions/follow_user.html'
     context_object_name = 'follows'
     login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
+        """
+        Ajoute au contexte la liste des abonnements et abonnés, ainsi que le formulaire de suivi.
+        """
         context = super().get_context_data(**kwargs)
         following = UserFollows.objects.filter(user=self.request.user)
         followers = UserFollows.objects.filter(followed_user=self.request.user)
         print(f"DEBUG: Following count: {following.count()}, Followers count: {followers.count()}")
         context['following'] = following
         context['followers'] = followers
-        context['form'] = FollowUserForm()  # Ajout du formulaire ici
+        context['form'] = FollowUserForm()  # Ajout du formulaire pour les suivis
         print("DEBUG: Formulaire de suivi ajouté au contexte")
         return context
 
     def get_queryset(self):
+        """
+        Filtre pour récupérer uniquement les abonnements de l'utilisateur connecté.
+        """
         queryset = UserFollows.objects.filter(user=self.request.user)
         print(f"DEBUG: QuerySet pour les utilisateurs suivis récupéré: {queryset}")
         return queryset
@@ -38,11 +48,18 @@ class FollowsListView(LoginRequiredMixin, ListView):
 
 
 class FollowUserView(LoginRequiredMixin, FormView):
+    """
+    Vue pour ajouter un abonnement à un utilisateur via AJAX.
+    Valide que l'utilisateur ne tente pas de se suivre lui-même.
+    """
     form_class = FollowUserForm
     success_url = reverse_lazy('follows_list')
     login_url = reverse_lazy('login')
 
     def form_valid(self, form):
+        """
+        Crée un abonnement après validation du formulaire.
+        """
         followed_user = form.cleaned_data['user_id']
         print(f"DEBUG: Tentative de suivre l'utilisateur: {followed_user.username}")
         if followed_user == self.request.user:
@@ -58,10 +75,16 @@ class FollowUserView(LoginRequiredMixin, FormView):
         return JsonResponse({"success": f"Vous suivez désormais {followed_user.username}."}, status=200)
 
     def form_invalid(self, form):
+        """
+        Retourne une réponse JSON en cas d'erreur de validation du formulaire.
+        """
         print(f"DEBUG: Le formulaire est invalide - Erreurs: {form.errors}")
         return JsonResponse({"error": "Formulaire invalide."}, status=400)
 
     def get_template_names(self):
+        """
+        Empêche la vue de rendre un template pour cette vue AJAX.
+        """
         print("DEBUG: Tentative d'accès à un template dans une vue AJAX")
         raise ImproperlyConfigured(
             "Cette vue est destinée à traiter des requêtes AJAX et ne doit pas rendre de template."
@@ -71,15 +94,25 @@ class FollowUserView(LoginRequiredMixin, FormView):
 
 
 class UnfollowUserView(LoginRequiredMixin, DeleteView):
+    """
+    Vue pour annuler un abonnement à un utilisateur suivi.
+    Effectue la suppression sans confirmation, via AJAX.
+    """
     model = UserFollows
     success_url = reverse_lazy('follows_list')
     login_url = reverse_lazy('login')
 
     def get(self, request, *args, **kwargs):
+        """
+        Redirige toute requête GET vers la méthode POST pour éviter de rendre un template.
+        """
         print(f"DEBUG: Tentative de désabonnement de l'utilisateur avec ID: {kwargs['pk']}")
         return self.post(request, *args, **kwargs)
 
     def get_queryset(self):
+        """
+        Filtre pour permettre uniquement la suppression d'abonnements de l'utilisateur connecté.
+        """
         queryset = UserFollows.objects.filter(user=self.request.user)
         print(f"DEBUG: QuerySet pour les utilisateurs suivis récupéré: {queryset}")
         return queryset
@@ -88,6 +121,10 @@ class UnfollowUserView(LoginRequiredMixin, DeleteView):
 
 
 class UserSearchView(LoginRequiredMixin, ListView):
+    """
+    Vue pour effectuer une recherche d'utilisateurs par autocomplétion via AJAX.
+    Limite les résultats à 5 utilisateurs correspondant à la requête.
+    """
     model = User
 
     def get(self, request, *args, **kwargs):
