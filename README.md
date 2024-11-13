@@ -50,11 +50,13 @@ LITRevu est une application qui permet aux utilisateurs de publier et demander d
 1. **Cloner le Répertoire**
    
     git clone https://github.com/VincentDesmouceaux/LITRevu.git
+
     cd LITRevu
 
 2. **Créer un Environnement Virtuel**
    
     python3 -m venv env
+    
     source env/bin/activate  
     
     Sur Windows : env\Scripts\activate
