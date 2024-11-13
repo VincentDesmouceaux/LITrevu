@@ -69,7 +69,29 @@ LITRevu est une application qui permet aux utilisateurs de publier et demander d
 
     python manage.py migrate
 
-5. **Lancer le Serveur**
+5. **Définir les Mots de Passe pour les Utilisateurs de Test**
+
+    python manage.py shell
+
+    Dans le shell, exécutez les commandes suivantes pour définir vos propres mots de passe :
+
+    from authentication.models import CustomUser
+
+    # Définir un mot de passe pour l'utilisateur 'toto'
+
+    toto = CustomUser.objects.get(username='toto')
+    toto.set_password('votre_mot_de_passe')
+    toto.save()
+
+    # Définir un mot de passe pour le super utilisateur 'developpeur'
+
+    developpeur = CustomUser.objects.get(username='developpeur')
+    developpeur.set_password('votre_mot_de_passe')
+    developpeur.save()
+
+    exit()
+
+6. **Lancer le Serveur**
 
     python manage.py runserver
 
